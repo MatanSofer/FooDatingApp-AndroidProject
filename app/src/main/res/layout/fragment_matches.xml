@@ -3,5 +3,5 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/new11"
-    tools:context=".MatchesFragment" />
+    android:background="@drawable/new13"
+    tools:context=".MatchesFragment"/>

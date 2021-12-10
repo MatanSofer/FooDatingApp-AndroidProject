@@ -3,8 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/profile_menu_btn"
         android:icon="@drawable/profileicon"
-        android:title="profile_menu_btn"
+        android:title="Profile"
         app:showAsAction="always" />
     <item
         android:id="@+id/mainApp_menu_btn"
