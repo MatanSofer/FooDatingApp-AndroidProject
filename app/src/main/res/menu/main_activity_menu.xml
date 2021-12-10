@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:icon="@drawable/profileicon"
+        android:title="profile_menu_btn"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/mainApp_menu_btn"
+        android:icon="@drawable/fireicon"
+        android:title="MainAppScreenBtn"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/messages_menu_btn"
+        android:icon="@drawable/messageicon"
+        android:title="Messages"
+        app:showAsAction="always" />
+</menu>
