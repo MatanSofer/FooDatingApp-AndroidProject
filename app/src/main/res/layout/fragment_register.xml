@@ -10,15 +10,14 @@
 
     <TextView
         android:id="@+id/name_tv2"
-        android:layout_width="0dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="96dp"
+        android:layout_width="113dp"
+        android:layout_height="42dp"
         android:layout_marginTop="16dp"
         android:fontFamily="casual"
         android:text="Gender :"
         android:textSize="30sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/password_tv"
         app:layout_constraintTop_toBottomOf="@+id/password_tv" />
 
     <EditText
@@ -38,8 +37,8 @@
         android:id="@+id/name_tv"
         android:layout_width="0dp"
         android:layout_height="46dp"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="80dp"
         android:fontFamily="casual"
         android:text="Name :"
         android:textSize="30sp"
@@ -102,7 +101,7 @@
         android:id="@+id/registerscreen_btn"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="28dp"
         android:text="Register"
         android:textStyle="bold"
         app:backgroundTint="@color/teal_700"
@@ -121,10 +120,10 @@
         android:text="Male"
         app:layout_constraintBottom_toBottomOf="@+id/female_reg_radio_btn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.777"
         app:layout_constraintStart_toEndOf="@+id/name_tv2"
         app:layout_constraintTop_toTopOf="@+id/female_reg_radio_btn"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <RadioButton
         android:id="@+id/female_reg_radio_btn"
@@ -139,17 +138,6 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/name_tv2"
         app:layout_constraintTop_toBottomOf="@+id/reg_password"
-        app:layout_constraintVertical_bias="0.058" />
-
-    <ImageButton
-        android:id="@+id/RegisterFrag_BackBtn"
-        android:layout_width="57dp"
-        android:layout_height="57dp"
-        android:layout_marginEnd="32dp"
-        android:src="@drawable/backbutton"
-        app:layout_constraintEnd_toStartOf="@+id/name_tv"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="?android:attr/selectableItemBackground"/>
+        app:layout_constraintVertical_bias="0.05" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
