@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "774760898400",
+    "project_id": "androidfoodatingproject",
+    "storage_bucket": "androidfoodatingproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:774760898400:android:87d6dcc57f404b0e014805",
+        "android_client_info": {
+          "package_name": "com.example.finalproject_foodating"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "774760898400-qnj06p3qfr1kcfs0hhb8eqholjgk9rck.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrA3aVPx8Fv5oJn0waAiAc6qvG4d8AF74"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "774760898400-qnj06p3qfr1kcfs0hhb8eqholjgk9rck.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

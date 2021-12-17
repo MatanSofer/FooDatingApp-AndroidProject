@@ -27,7 +27,6 @@
         android:layout_marginEnd="20dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Email"
         app:layout_constraintBottom_toBottomOf="@+id/email_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -78,14 +77,13 @@
         android:layout_marginEnd="20dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
         app:layout_constraintBottom_toBottomOf="@+id/name_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/name_tv" />
 
     <EditText
-        android:id="@+id/reg_password"
+        android:id="@+id/password_reg"
         android:layout_width="178dp"
         android:layout_height="63dp"
         android:layout_marginStart="2dp"
@@ -118,26 +116,35 @@
 
         android:layout_marginEnd="16dp"
         android:text="Male"
-        app:layout_constraintBottom_toBottomOf="@+id/female_reg_radio_btn"
+        app:layout_constraintBottom_toBottomOf="@+id/female_reg_radiobtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.777"
         app:layout_constraintStart_toEndOf="@+id/name_tv2"
-        app:layout_constraintTop_toTopOf="@+id/female_reg_radio_btn"
+        app:layout_constraintTop_toTopOf="@+id/female_reg_radiobtn"
         app:layout_constraintVertical_bias="0.0" />
 
     <RadioButton
-        android:id="@+id/female_reg_radio_btn"
+        android:id="@+id/female_reg_radiobtn"
         android:layout_width="81dp"
         android:layout_height="68dp"
-
         android:layout_marginTop="10dp"
         android:layout_marginEnd="24dp"
         android:text="Female"
         app:layout_constraintBottom_toBottomOf="@+id/name_tv2"
         app:layout_constraintEnd_toStartOf="@+id/male_reg_radiobtn"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/name_tv2"
-        app:layout_constraintTop_toBottomOf="@+id/reg_password"
-        app:layout_constraintVertical_bias="0.05" />
+        app:layout_constraintTop_toBottomOf="@+id/password_reg"
+        app:layout_constraintVertical_bias="0.1" />
+
+    <ProgressBar
+        android:id="@+id/register_progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="100dp"
+        android:layout_height="88dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
