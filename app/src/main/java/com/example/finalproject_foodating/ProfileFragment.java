@@ -6,15 +6,18 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 
 public class ProfileFragment extends Fragment {
+    String UserEmail;
     View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -22,6 +25,21 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_profile, container, false);
         setHasOptionsMenu(true);
+
+        UserEmail = MainAppFragmentArgs.fromBundle(getArguments()).getUserEmail();
+
+
+        Button Btn = view.findViewById(R.id.button);
+        Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProfileFragmentDirections.ActionProfileFragmentToEditDetailsFragment action = ProfileFragmentDirections.actionProfileFragmentToEditDetailsFragment(UserEmail);
+                Navigation.findNavController(view).navigate(action);
+            }
+        });
+
+
+        //Log.d("tag",UserEmail);
         return view;
 
     }
@@ -35,10 +53,10 @@ public class ProfileFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.mainApp_menu_btn:
-                Navigation.findNavController(view).navigate(ProfileFragmentDirections.actionProfileFragmentToMainAppFragment());
+                Navigation.findNavController(view).navigate(ProfileFragmentDirections.actionProfileFragmentToMainAppFragment(UserEmail ));
                 break;
             case R.id.messages_menu_btn:
-                Navigation.findNavController(view).navigate(ProfileFragmentDirections.actionProfileFragmentToMatchesFragment());
+                Navigation.findNavController(view).navigate(ProfileFragmentDirections.actionProfileFragmentToMatchesFragment(UserEmail ));
                 break;
             default:
                 return super.onOptionsItemSelected(item);

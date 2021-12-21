@@ -5,4 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/new13"
-    tools:context=".EditDetailsFragment"/>
+    tools:context=".EditDetailsFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/post_edit_rv"
+        android:layout_width="414dp"
+        android:layout_height="280dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

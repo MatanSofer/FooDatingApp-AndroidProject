@@ -16,12 +16,16 @@ import android.view.ViewGroup;
 
 public class MainAppFragment extends Fragment {
     View view;
+    String UserEmail;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
          view = inflater.inflate(R.layout.fragment_main_app, container, false);
          setHasOptionsMenu(true);
+
+        UserEmail = MainAppFragmentArgs.fromBundle(getArguments()).getUserEmail();
+
          return view;
 
     }
@@ -36,10 +40,10 @@ public class MainAppFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.profile_menu_btn:
-                Navigation.findNavController(view).navigate(MainAppFragmentDirections.actionMainAppFragmentToProfileFragment());
+                Navigation.findNavController(view).navigate(MainAppFragmentDirections.actionMainAppFragmentToProfileFragment(UserEmail));
                 break;
             case R.id.messages_menu_btn:
-                Navigation.findNavController(view).navigate(MainAppFragmentDirections.actionMainAppFragmentToMatchesFragment());
+                Navigation.findNavController(view).navigate(MainAppFragmentDirections.actionMainAppFragmentToMatchesFragment(UserEmail));
                 break;
             default:
                 return super.onOptionsItemSelected(item);

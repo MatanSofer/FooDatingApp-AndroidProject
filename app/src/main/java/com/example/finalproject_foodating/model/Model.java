@@ -33,4 +33,29 @@ public class Model {
     public void GetUserByEmail(String UserEmail ,GetUserByEmailListener listener){
         modelFireBase.GetUserByEmail(UserEmail ,listener);
     }
+
+
+
+    public interface GetAllPostsListener{
+        void onComplete(List<Post> posts);
+    }
+    public void getAllPosts(GetAllPostsListener listener){
+        modelFireBase.getAllPosts(listener);
+    }
+
+    public interface AddPostListener{
+        void onComplete();
+    }
+    public void addPost(Post post,AddPostListener listener){
+        modelFireBase.addPost(post,listener);
+    }
+
+    public interface GetPostsByEmailListener{
+        void onComplete(List<Post> posts);
+    }
+    public void GetPostsByEmail(String UserEmail ,GetPostsByEmailListener listener){
+        modelFireBase.GetPostsByEmail(UserEmail ,listener);
+
+    }
+
 }

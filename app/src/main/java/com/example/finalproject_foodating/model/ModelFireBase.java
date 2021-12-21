@@ -81,7 +81,73 @@ public class ModelFireBase {
             }
         });
     }
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+    public void addPost(Post NewPost, Model.AddPostListener listener) {
+// Add a new document with a generated ID
+        db.collection("posts")
+                .document(NewPost.getOwner()).set(NewPost.toJson())
+                .addOnSuccessListener((successListener)-> {
+                    listener.onComplete();
+                })
+                .addOnFailureListener((e)-> {
+                    Log.d("TAG", e.getMessage());
+                });
+
     }
+    public void getAllPosts(Model.GetAllPostsListener listener) {
+        db.collection("posts").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                LinkedList<Post> postsList = new LinkedList<>(); //might be error
+                if(task.isSuccessful()){
+                    for (QueryDocumentSnapshot doc: task.getResult()){
+                        Post p = Post.fromJson(doc.getData());
+                        if (p != null) {
+                            postsList.add(p); //add from document each user
+                        }
+                    }
+                }else{
+
+                }
+                listener.onComplete(postsList);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onComplete(null);
+            }
+        });
+    }
+
+
+    public void GetPostsByEmail(String UserEmail, Model.GetPostsByEmailListener listener) {
+        db.collection("posts").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                LinkedList<Post> postsList = new LinkedList<>(); //might be error
+                if(task.isSuccessful()){
+                    for (QueryDocumentSnapshot doc: task.getResult()){
+                        Post p = Post.fromJson(doc.getData());
+                        if (p != null && p.getOwner().equals(UserEmail)) {
+                            postsList.add(p); //add from document each user
+                        }
+                    }
+                }else{
+
+                }
+                listener.onComplete(postsList);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onComplete(null);
+            }
+        });
+    }
+}
 
 
 

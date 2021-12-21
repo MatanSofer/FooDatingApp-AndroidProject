@@ -46,6 +46,9 @@
         <action
             android:id="@+id/action_mainAppFragment_to_matchesFragment"
             app:destination="@id/matchesFragment" />
+        <argument
+            android:name="userEmail"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -64,6 +67,9 @@
         <action
             android:id="@+id/action_profileFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <argument
+            android:name="userEmail"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/matchesFragment"
@@ -79,12 +85,19 @@
         <action
             android:id="@+id/action_matchesFragment_to_messagesFragment"
             app:destination="@id/messagesFragment" />
+        <argument
+            android:name="userEmail"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/editDetailsFragment"
         android:name="com.example.finalproject_foodating.EditDetailsFragment"
         android:label="Edit details"
-        tools:layout="@layout/fragment_edit_details" />
+        tools:layout="@layout/fragment_edit_details" >
+        <argument
+            android:name="userEmail"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.finalproject_foodating.SettingsFragment"

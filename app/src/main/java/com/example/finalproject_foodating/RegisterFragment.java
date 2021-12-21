@@ -1,9 +1,13 @@
 package com.example.finalproject_foodating;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -13,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.example.finalproject_foodating.model.Model;
 import com.example.finalproject_foodating.model.User;
@@ -50,10 +55,9 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(ViewGroup.VISIBLE);
-             //   RegisterBtn.setEnabled(false);
+                RegisterBtn.setEnabled(false);
                 SaveUserFields();
-               // Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_mainAppFragment);
-
+                //Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_mainAppFragment);
 
 
             }
@@ -66,6 +70,7 @@ public class RegisterFragment extends Fragment {
 
     }
     public void SaveUserFields(){
+
         UserName = NameEt.getText().toString();
         UserPassword = Password.getText().toString();
         UserEmail = EmailEt.getText().toString();
@@ -81,23 +86,29 @@ public class RegisterFragment extends Fragment {
         if(TextUtils.isEmpty(UserName)) {
         //    AllFieldCompleted=false;
             NameEt.setError("Please Fill Your Name");
+            Toast.makeText(getActivity(),"Missing Name , Try Again!",Toast.LENGTH_LONG).show();
 
         }
         if(TextUtils.isEmpty(UserPassword)) {
         //    AllFieldCompleted=false;
             Password.setError("Please Fill Your Name");
+            Toast.makeText(getActivity(),"Missing Password , Try Again!",Toast.LENGTH_LONG).show();
+
 
         }
         if(TextUtils.isEmpty(UserEmail)) {
          //   AllFieldCompleted=false;
             EmailEt.setError("Please Fill Your Email");
+            Toast.makeText(getActivity(),"Missing Email , Try Again!",Toast.LENGTH_LONG).show();
+
 
         }
 
-       // User user = new User(UserName,UserPassword,UserEmail,UserGender);
-       // Model.instance.addUser(user,()->{
-            //Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_mainAppFragment);
-     //   });
+//        User user = new User(UserName,UserPassword,UserEmail,UserGender);
+//        Model.instance.addUser(user,()->{
+//            RegisterFragmentDirections.ActionRegisterFragmentToMainAppFragment action = RegisterFragmentDirections.actionRegisterFragmentToMainAppFragment(UserEmail);
+//            Navigation.findNavController(view).navigate(action);
+//        });
     }
 
 }

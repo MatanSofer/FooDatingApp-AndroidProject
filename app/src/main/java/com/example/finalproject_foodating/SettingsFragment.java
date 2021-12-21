@@ -18,6 +18,7 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view =inflater.inflate(R.layout.fragment_settings, container, false);
+
         LogoutBtn = view.findViewById(R.id.settingsFrag_LogoutBtn);
         LogoutBtn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_settingsFragment_to_mainScreenFragment));
         return view;
