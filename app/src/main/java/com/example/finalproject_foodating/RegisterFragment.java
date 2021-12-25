@@ -1,13 +1,9 @@
 package com.example.finalproject_foodating;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -43,7 +39,7 @@ public class RegisterFragment extends Fragment {
         Password = view.findViewById(R.id.password_reg);
         MaleGenderBtn = (RadioButton)view.findViewById(R.id.male_reg_radiobtn);
         FemaleGenderBtn = (RadioButton)view.findViewById(R.id.female_reg_radiobtn);
-        RegisterBtn = view.findViewById(R.id.registerscreen_btn);
+        RegisterBtn = view.findViewById(R.id.editsavebtn);
         progressBar=view.findViewById(R.id.register_progressBar);
 
         progressBar.setVisibility(ViewGroup.GONE);
@@ -87,28 +83,31 @@ public class RegisterFragment extends Fragment {
         //    AllFieldCompleted=false;
             NameEt.setError("Please Fill Your Name");
             Toast.makeText(getActivity(),"Missing Name , Try Again!",Toast.LENGTH_LONG).show();
-
+//            Navigation.findNavController(view)
+//                    .navigate(R.id.action_registerFragment_self);
         }
-        if(TextUtils.isEmpty(UserPassword)) {
+        else if(TextUtils.isEmpty(UserPassword)) {
         //    AllFieldCompleted=false;
             Password.setError("Please Fill Your Name");
             Toast.makeText(getActivity(),"Missing Password , Try Again!",Toast.LENGTH_LONG).show();
-
+//            Navigation.findNavController(view)
+//                    .navigate(R.id.action_registerFragment_self);
 
         }
-        if(TextUtils.isEmpty(UserEmail)) {
+        else if(TextUtils.isEmpty(UserEmail)) {
          //   AllFieldCompleted=false;
             EmailEt.setError("Please Fill Your Email");
             Toast.makeText(getActivity(),"Missing Email , Try Again!",Toast.LENGTH_LONG).show();
-
+//            Navigation.findNavController(view)
+//                    .navigate(R.id.action_registerFragment_self);
 
         }
 
-//        User user = new User(UserName,UserPassword,UserEmail,UserGender);
-//        Model.instance.addUser(user,()->{
-//            RegisterFragmentDirections.ActionRegisterFragmentToMainAppFragment action = RegisterFragmentDirections.actionRegisterFragmentToMainAppFragment(UserEmail);
-//            Navigation.findNavController(view).navigate(action);
-//        });
+        User user = new User(UserName,UserPassword,UserEmail,UserGender);
+        Model.instance.addUser(user,()->{
+            RegisterFragmentDirections.ActionRegisterFragmentToMainAppFragment action = RegisterFragmentDirections.actionRegisterFragmentToMainAppFragment(UserEmail);
+            Navigation.findNavController(view).navigate(action);
+        });
     }
 
 }

@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_registerFragment_to_mainAppFragment"
             app:destination="@id/mainAppFragment" />
+        <action
+            android:id="@+id/action_registerFragment_self"
+            app:destination="@id/registerFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -34,6 +37,9 @@
         <action
             android:id="@+id/action_loginFragment_to_mainAppFragment"
             app:destination="@id/mainAppFragment" />
+        <action
+            android:id="@+id/action_loginFragment_self"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/mainAppFragment"
@@ -49,6 +55,9 @@
         <argument
             android:name="userEmail"
             app:argType="string" />
+        <action
+            android:id="@+id/action_mainAppFragment_self"
+            app:destination="@id/mainAppFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -106,6 +115,9 @@
         <action
             android:id="@+id/action_settingsFragment_to_mainScreenFragment"
             app:destination="@id/mainScreenFragment" />
+        <argument
+            android:name="userEmail"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/messagesFragment"

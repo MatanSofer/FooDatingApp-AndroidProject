@@ -2,7 +2,10 @@ package com.example.finalproject_foodating.model;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class User {
@@ -11,6 +14,9 @@ public class User {
     public String Email="";
     public String Password="";
     public String Gender ="";
+    //public List<User> Likes =new LinkedList<>();
+    List<String> TheUserLikes = new ArrayList<>();
+    List<String> TheUserDisLikes = new ArrayList<>();
 
     public User(){
 
@@ -20,8 +26,16 @@ public class User {
         this.Name=name;
         this.Email=email;
         this.Gender = gender;
-    }
 
+    }
+    public User(String name , String password , String email , String gender,List<String> TheUserLikes,List<String> TheUserDisikes){
+        this.Password=password;
+        this.Name=name;
+        this.Email=email;
+        this.Gender = gender;
+        this.TheUserLikes=TheUserLikes;
+        this.TheUserDisLikes=TheUserDisikes;
+    }
     public String getName() {
         return Name;
     }
@@ -37,7 +51,12 @@ public class User {
     public String getGender() {
         return Gender;
     }
-
+    public List<String> getUserLikes(){
+        return TheUserLikes;
+    }
+    public List<String> getUserDisLikes(){
+        return TheUserDisLikes;
+    }
     public void setName(String name) {
         this.Name=name;
     }
@@ -62,6 +81,8 @@ public class User {
         json.put("password",getPassword());
         json.put("email",getEmail());
         json.put("gender",getGender());
+        json.put("user_dislike",getUserDisLikes());
+        json.put("user_likes",getUserLikes());
         return json;
     }
     static User fromJson(Map<String,Object> json ){
@@ -69,7 +90,10 @@ public class User {
         String name1 = (String)json.get("name");
         String password1 = (String)json.get("password");
         String gender1 = (String)json.get("gender");
-        User user = new User(name1,password1,email1,gender1);
+        List<String> TheUserLikes = (List<String>)json.get("user_likes");
+        List<String> TheUserDisLikes = (List<String>)json.get("user_dislike");
+
+        User user = new User(name1,password1,email1,gender1,TheUserLikes,TheUserDisLikes);
         return user;
 
     }

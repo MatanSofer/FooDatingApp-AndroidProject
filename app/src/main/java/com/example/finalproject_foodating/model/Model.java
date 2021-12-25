@@ -1,5 +1,6 @@
 package com.example.finalproject_foodating.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Model {
@@ -46,8 +47,8 @@ public class Model {
     public interface AddPostListener{
         void onComplete();
     }
-    public void addPost(Post post,AddPostListener listener){
-        modelFireBase.addPost(post,listener);
+    public void addPost(Post post,String FoodId,AddPostListener listener){
+        modelFireBase.addPost(post,FoodId,listener);
     }
 
     public interface GetPostsByEmailListener{
@@ -58,4 +59,17 @@ public class Model {
 
     }
 
+    public interface EditUserListener{
+        void onComplete();
+    }
+    public void EditUser(String UserEmail,String Name,String Password,String Email,EditUserListener listener){
+        modelFireBase.EditUser(UserEmail,Name,Password,Email,listener);
+    }
+
+    public interface EditUserLikesListener{
+        void onComplete();
+    }
+    public void EditUserLikes(Boolean LikeOrDislike,String UserEmail,String LikeOrDislikeUser,EditUserLikesListener listener){
+        modelFireBase.EditUserLikes(LikeOrDislike,UserEmail,LikeOrDislikeUser,listener);
+    }
 }

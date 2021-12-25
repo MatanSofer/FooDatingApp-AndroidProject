@@ -14,9 +14,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 
 public class ProfileFragment extends Fragment {
+    ImageButton EditBtn,SettingsBtn;
     String UserEmail;
     View view;
     @Override
@@ -29,8 +31,8 @@ public class ProfileFragment extends Fragment {
         UserEmail = MainAppFragmentArgs.fromBundle(getArguments()).getUserEmail();
 
 
-        Button Btn = view.findViewById(R.id.button);
-        Btn.setOnClickListener(new View.OnClickListener() {
+        EditBtn = (ImageButton)view.findViewById(R.id.imageButton_editdatails);
+        EditBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ProfileFragmentDirections.ActionProfileFragmentToEditDetailsFragment action = ProfileFragmentDirections.actionProfileFragmentToEditDetailsFragment(UserEmail);
@@ -38,7 +40,14 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-
+        SettingsBtn = (ImageButton)view.findViewById(R.id.imageButton_settings);
+        SettingsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProfileFragmentDirections.ActionProfileFragmentToSettingsFragment action = ProfileFragmentDirections.actionProfileFragmentToSettingsFragment(UserEmail);
+                Navigation.findNavController(view).navigate(action);
+            }
+        });
         //Log.d("tag",UserEmail);
         return view;
 

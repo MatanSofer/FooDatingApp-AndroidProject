@@ -3,6 +3,7 @@ package com.example.finalproject_foodating;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -64,11 +65,17 @@ public class LoginFragment extends Fragment {
         UserEmail = EmailEt.getText().toString();
         if(TextUtils.isEmpty(UserPassword)) {
             Password.setError("Please Fill Your Name");
-            //Toast.makeText(getActivity(),"Missing Password , Try Again!",Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(),"Missing Password , Try Again!",Toast.LENGTH_LONG).show();
+//            Navigation.findNavController(view)
+//                    .navigate(R.id.action_loginFragment_self);
+
+
         }
-        if(TextUtils.isEmpty(UserEmail)) {
+        else if(TextUtils.isEmpty(UserEmail)) {
             EmailEt.setError("Please Fill Your Email");
-            //Toast.makeText(getActivity(),"Missing Email , Try Again!",Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(),"Missing Email , Try Again!",Toast.LENGTH_LONG).show();
+//            Navigation.findNavController(view)
+//                    .navigate(R.id.action_loginFragment_self);
         }
 
     }
@@ -76,14 +83,18 @@ public class LoginFragment extends Fragment {
 
                 Model.instance.GetUserByEmail(UserEmail,(user)->{
                     if(user == null){
-                        //Toast.makeText(getActivity(),"Email doesn't exist,try again",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(),"Email doesn't exist,try again",Toast.LENGTH_LONG).show();
+                        Navigation.findNavController(view)
+                                .navigate(R.id.action_loginFragment_self);
                     }
-                    if(user.getPassword().equals(UserPassword)){
+                    else if(user.getPassword().equals(UserPassword)){
                         LoginFragmentDirections.ActionLoginFragmentToMainAppFragment action = LoginFragmentDirections.actionLoginFragmentToMainAppFragment(user.getEmail());
                         Navigation.findNavController(view).navigate(action);
                     }
                     else{
-                        //Toast.makeText(getActivity(),"Wrong Password,try again",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(),"Wrong Password,try again",Toast.LENGTH_LONG).show();
+                        Navigation.findNavController(view)
+                                .navigate(R.id.action_loginFragment_self);
                     }
                 });
             }

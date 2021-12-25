@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -12,7 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.example.finalproject_foodating.model.Model;
@@ -23,6 +28,10 @@ import java.util.List;
 
 
 public class EditDetailsFragment extends Fragment {
+    Button SaveDetailsBtn,SavePostBtn;
+    EditText NameEt,EmailEt,Password,FoodName,Description;
+    ProgressBar progressBar;
+    String UserNewName,UserNewPassword,UserNewEmail,DescriptionStr,FoodNameStr;
     String UserEmail ;
     View view;
     MyAdapter adapter;
@@ -34,6 +43,40 @@ public class EditDetailsFragment extends Fragment {
         view =inflater.inflate(R.layout.fragment_edit_details, container, false);
 
         UserEmail = MainAppFragmentArgs.fromBundle(getArguments()).getUserEmail();
+
+        NameEt = view.findViewById(R.id.name_edit_et);
+        EmailEt = view.findViewById(R.id.email_edit_et);
+        Password = view.findViewById(R.id.password_edit_et);
+        SaveDetailsBtn = view.findViewById(R.id.save_edit_btn);
+        progressBar=view.findViewById(R.id.edit_progressBar);
+        progressBar.setVisibility(ViewGroup.GONE);
+
+        PerformUserFields();
+
+
+        SaveDetailsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SaveUserDetails();
+            }
+        });
+
+
+        FoodName = view.findViewById(R.id.NewFoodName_et);
+        Description = view.findViewById(R.id.NewDescription_et);
+        SavePostBtn = view.findViewById(R.id.save_post_btn);
+
+        SavePostBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SavePostDetails();
+            }
+        });
+
+
+
+
+
         //get all the posts the user owns
 
         RecyclerView list = view.findViewById(R.id.post_edit_rv);
@@ -47,7 +90,7 @@ public class EditDetailsFragment extends Fragment {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override //click on item and what will heppen
             public void onItemClick(int position, View v) {
-//
+
             }
         });
 
@@ -65,7 +108,7 @@ public class EditDetailsFragment extends Fragment {
     }
  //ot right function just to check
     private void refreshData() {
-        Model.instance.getAllPosts(new Model.GetAllPostsListener() {
+        Model.instance.GetPostsByEmail(UserEmail,new Model.GetPostsByEmailListener() {
             @Override
             public void onComplete(List<Post> p) {
                 posts = p;
@@ -137,5 +180,31 @@ public class EditDetailsFragment extends Fragment {
         public int getItemCount() {
             return posts.size();
         }
+    }
+
+
+
+    public void PerformUserFields(){
+        Model.instance.GetUserByEmail(UserEmail,(user)->{
+            NameEt.setText(user.getName());
+            EmailEt.setText(user.getEmail());
+        });
+    }
+    public void SaveUserDetails(){
+       // UserEmail=EmailEt.getText().toString();
+        UserNewName = NameEt.getText().toString();
+        UserNewPassword= Password.getText().toString();
+        UserNewEmail = EmailEt.getText().toString();
+        Model.instance.EditUser(UserEmail,UserNewName, UserNewPassword,UserNewEmail,()->{
+        } );
+
+    }
+    public void SavePostDetails(){
+        DescriptionStr = Description.getText().toString();
+        FoodNameStr= FoodName.getText().toString();
+        Post post= new Post(UserEmail,FoodNameStr,DescriptionStr);
+        Model.instance.addPost(post,FoodNameStr+UserEmail,()->{
+        });
+
     }
 }

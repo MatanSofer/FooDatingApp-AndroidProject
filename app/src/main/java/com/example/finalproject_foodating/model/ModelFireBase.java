@@ -16,28 +16,34 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class ModelFireBase {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    List<String> AllUsersLikes = new LinkedList<String>();
+    List<String> AllUserDislikes = new LinkedList<String>();
     //if inside the fragment will be import  firebase -10 points
     //because if the fragment want access to db it should be through the model
     public void getAllUsers(Model.GetAllUsersListener listener) {
         db.collection("user").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                LinkedList<User> studentsList = new LinkedList<>(); //might be error
+                LinkedList<User> UsersList = new LinkedList<>(); //might be error
                 if(task.isSuccessful()){
                     for (QueryDocumentSnapshot doc: task.getResult()){
+
                         User u = User.fromJson(doc.getData());
                         if (u != null) {
-                            studentsList.add(u); //add from document each user
+                            Log.d("add","user");
+                            UsersList.add(u); //add from document each user
+                            Log.d("email",u.getEmail());
                         }
                     }
                 }else{
 
                 }
-                listener.onComplete(studentsList);
+                listener.onComplete(UsersList);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -82,13 +88,57 @@ public class ModelFireBase {
         });
     }
 
+    public void EditUser(String UserEmail,String Name,String Password,String Email,Model.EditUserListener listener){
+        DocumentReference EditUser = db.collection("user").document(UserEmail);
+        EditUser.update("email", Email);
+        EditUser.update("name", Name);
+        EditUser.update("password", Password)
+                .addOnSuccessListener((successListener)-> {
+                    listener.onComplete();
+                })
+                .addOnFailureListener((e)-> {
+                    Log.d("TAG", e.getMessage());
+                });
+    }
+    public void EditUserLikes(Boolean LikeOrDislike, String UserEmail,String LikeOrDislikeUser, Model.EditUserLikesListener listener){
+        DocumentReference EditUserLikes = db.collection("user").document(UserEmail);
+
+        Model.instance.GetUserByEmail(UserEmail,(user)->{
+            AllUsersLikes=user.getUserLikes();
+            AllUserDislikes = user.getUserDisLikes();
+
+        });
+        if(LikeOrDislike){
+            Log.d("Like",LikeOrDislikeUser);
+            AllUsersLikes.add(LikeOrDislikeUser);
+            Log.d("Like",AllUsersLikes.get(0));
+            EditUserLikes.update("gender", "adda");
+            EditUserLikes.update("user_likes",AllUsersLikes)
+                    .addOnSuccessListener((successListener)-> {
+                        listener.onComplete();
+                    })
+                    .addOnFailureListener((e)-> {
+                        Log.d("TAG", e.getMessage());
+                    });
+        }
+        else{
+                AllUserDislikes.add(LikeOrDislikeUser);
+                EditUserLikes.update("user_dislike", AllUserDislikes )
+                        .addOnSuccessListener((successListener)-> {
+                            listener.onComplete();
+                        })
+                        .addOnFailureListener((e)-> {
+                            Log.d("TAG", e.getMessage());
+                        });
+
+    }}
 //////////////////////////////////////////////////////////////////////////////
 
 
-    public void addPost(Post NewPost, Model.AddPostListener listener) {
+    public void addPost(Post NewPost,String FoodId, Model.AddPostListener listener) {
 // Add a new document with a generated ID
         db.collection("posts")
-                .document(NewPost.getOwner()).set(NewPost.toJson())
+                .document(FoodId).set(NewPost.toJson())
                 .addOnSuccessListener((successListener)-> {
                     listener.onComplete();
                 })
@@ -133,6 +183,9 @@ public class ModelFireBase {
                         Post p = Post.fromJson(doc.getData());
                         if (p != null && p.getOwner().equals(UserEmail)) {
                             postsList.add(p); //add from document each user
+                        }
+                        else{
+                            continue;
                         }
                     }
                 }else{

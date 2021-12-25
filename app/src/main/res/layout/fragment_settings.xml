@@ -4,19 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/new12"
+    android:background="@drawable/foobackgroundnew"
     tools:context=".SettingsFragment" >
 
     <Button
         android:id="@+id/settingsFrag_LogoutBtn"
-        android:layout_width="205dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="632dp"
-        android:layout_marginEnd="100dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:backgroundTint="@android:color/holo_blue_dark"
         android:text="Logout"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.932" />
 
 </androidx.constraintlayout.widget.ConstraintLayout >

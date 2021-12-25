@@ -96,7 +96,7 @@
         app:layout_constraintStart_toEndOf="@+id/password_tv" />
 
     <Button
-        android:id="@+id/registerscreen_btn"
+        android:id="@+id/editsavebtn"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginBottom="28dp"
