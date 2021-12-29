@@ -28,7 +28,7 @@ public class ProfileFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_profile, container, false);
         setHasOptionsMenu(true);
 
-        UserEmail = MainAppFragmentArgs.fromBundle(getArguments()).getUserEmail();
+        UserEmail = ProfileFragmentArgs.fromBundle(getArguments()).getUserEmail();
 
 
         EditBtn = (ImageButton)view.findViewById(R.id.imageButton_editdatails);

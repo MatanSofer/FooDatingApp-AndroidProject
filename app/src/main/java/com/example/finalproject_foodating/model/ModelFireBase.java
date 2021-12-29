@@ -172,7 +172,26 @@ public class ModelFireBase {
         });
     }
 
-
+    public void GetPostByFoodId(String FoodPostId, Model.GetPostByFoodIdListener listener) {
+        DocumentReference docRef = db.collection("posts").document(FoodPostId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Post p = Post.fromJson(document.getData());
+                        listener.onComplete(p);
+                    } else {
+                        listener.onComplete(null);
+                    }
+                } else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                    listener.onComplete(null);
+                }
+            }
+        });
+    }
     public void GetPostsByEmail(String UserEmail, Model.GetPostsByEmailListener listener) {
         db.collection("posts").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

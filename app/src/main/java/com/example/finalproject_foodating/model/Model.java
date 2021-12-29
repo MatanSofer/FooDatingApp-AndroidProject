@@ -72,4 +72,12 @@ public class Model {
     public void EditUserLikes(Boolean LikeOrDislike,String UserEmail,String LikeOrDislikeUser,EditUserLikesListener listener){
         modelFireBase.EditUserLikes(LikeOrDislike,UserEmail,LikeOrDislikeUser,listener);
     }
+
+
+    public interface GetPostByFoodIdListener{
+        void onComplete(Post post);
+    }
+    public void GetPostByFoodId(String FoodPostId ,GetPostByFoodIdListener listener){
+        modelFireBase.GetPostByFoodId(FoodPostId ,listener);
+    }
 }

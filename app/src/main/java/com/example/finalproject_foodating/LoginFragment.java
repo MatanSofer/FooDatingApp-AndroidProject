@@ -8,6 +8,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,9 @@ import android.widget.Toast;
 
 import com.example.finalproject_foodating.model.Model;
 import com.example.finalproject_foodating.model.Post;
+import com.example.finalproject_foodating.model.User;
+
+import java.util.List;
 
 
 public class LoginFragment extends Fragment {
@@ -26,6 +30,8 @@ public class LoginFragment extends Fragment {
     ProgressBar progressBar;
     String UserPassword,UserEmail;
     View view;
+    User u1;
+    boolean isValid1;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -42,62 +48,65 @@ public class LoginFragment extends Fragment {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(ViewGroup.VISIBLE);
-                loginBtn.setEnabled(false);
-                SaveFields();
-                CheckIfDetailsCorrect(UserEmail);
-
+                if(SaveFields()&&CheckIfDetailsCorrect()){
+                    progressBar.setVisibility(ViewGroup.VISIBLE);
+                    loginBtn.setEnabled(false);
+                    LoginFragmentDirections.ActionLoginFragmentToMainAppFragment action = LoginFragmentDirections.actionLoginFragmentToMainAppFragment(UserEmail);
+                    Navigation.findNavController(view).navigate(action);
+                }
 
 
                 //Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_mainAppFragment);
-
-
-
-
             }
         });
         //loginBtn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_loginFragment_to_mainAppFragment));
 
          return view;
     }
-    public void SaveFields (){
+    public boolean SaveFields (){
+        boolean isValid = true;
         UserPassword = Password.getText().toString();
         UserEmail = EmailEt.getText().toString();
-        if(TextUtils.isEmpty(UserPassword)) {
+
+        if(TextUtils.isEmpty(UserEmail)) {
+            EmailEt.setError("Please Fill Your Email");
+            Toast.makeText(getActivity(),"Missing Email , Try Again!",Toast.LENGTH_LONG).show();
+            isValid = false;
+//            Navigation.findNavController(view)
+//                    .navigate(R.id.action_loginFragment_self);
+        }
+        else if(TextUtils.isEmpty(UserPassword)) {
             Password.setError("Please Fill Your Name");
             Toast.makeText(getActivity(),"Missing Password , Try Again!",Toast.LENGTH_LONG).show();
 //            Navigation.findNavController(view)
 //                    .navigate(R.id.action_loginFragment_self);
-
+            isValid = false;
 
         }
-        else if(TextUtils.isEmpty(UserEmail)) {
-            EmailEt.setError("Please Fill Your Email");
-            Toast.makeText(getActivity(),"Missing Email , Try Again!",Toast.LENGTH_LONG).show();
-//            Navigation.findNavController(view)
-//                    .navigate(R.id.action_loginFragment_self);
-        }
-
+        return isValid;
     }
-    public void CheckIfDetailsCorrect(String UserEmail){
+    public boolean CheckIfDetailsCorrect(){
 
-                Model.instance.GetUserByEmail(UserEmail,(user)->{
-                    if(user == null){
-                        Toast.makeText(getActivity(),"Email doesn't exist,try again",Toast.LENGTH_LONG).show();
-                        Navigation.findNavController(view)
-                                .navigate(R.id.action_loginFragment_self);
-                    }
-                    else if(user.getPassword().equals(UserPassword)){
-                        LoginFragmentDirections.ActionLoginFragmentToMainAppFragment action = LoginFragmentDirections.actionLoginFragmentToMainAppFragment(user.getEmail());
-                        Navigation.findNavController(view).navigate(action);
-                    }
-                    else{
-                        Toast.makeText(getActivity(),"Wrong Password,try again",Toast.LENGTH_LONG).show();
-                        Navigation.findNavController(view)
-                                .navigate(R.id.action_loginFragment_self);
-                    }
-                });
-            }
+       Model.instance.GetUserByEmail(UserEmail,(user)->{
+
+           if(user == null){
+               Toast.makeText(getActivity(),"Email doesn't exist,try again",Toast.LENGTH_LONG).show();
+               isValid1 = false;
+
+           }
+           else if(user.getPassword().equals(UserPassword)){
+               isValid1 = true;
+           }
+           else{
+               Toast.makeText(getActivity(),"Wrong Password,try again",Toast.LENGTH_LONG).show();
+               isValid1 = false;
+           }
+       });
+
+
+
+        return isValid1;
+    }
 
 
 

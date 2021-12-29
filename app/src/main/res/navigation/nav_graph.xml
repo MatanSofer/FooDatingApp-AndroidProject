@@ -106,6 +106,9 @@
         <argument
             android:name="userEmail"
             app:argType="string" />
+        <action
+            android:id="@+id/action_editDetailsFragment_to_editPostFragment"
+            app:destination="@id/editPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -124,4 +127,16 @@
         android:name="com.example.finalproject_foodating.MessagesFragment"
         android:label="fragment_messages"
         tools:layout="@layout/fragment_messages" />
+    <fragment
+        android:id="@+id/editPostFragment"
+        android:name="com.example.finalproject_foodating.EditPostFragment"
+        android:label="fragment_edit_post"
+        tools:layout="@layout/fragment_edit_post" >
+        <argument
+            android:name="foodId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_editPostFragment_to_editDetailsFragment"
+            app:destination="@id/editDetailsFragment" />
+    </fragment>
 </navigation>

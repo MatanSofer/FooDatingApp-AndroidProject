@@ -33,6 +33,7 @@ public class EditDetailsFragment extends Fragment {
     ProgressBar progressBar;
     String UserNewName,UserNewPassword,UserNewEmail,DescriptionStr,FoodNameStr;
     String UserEmail ;
+    String foodId;
     View view;
     MyAdapter adapter;
     List<Post> posts = new LinkedList<Post>();
@@ -42,7 +43,7 @@ public class EditDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         view =inflater.inflate(R.layout.fragment_edit_details, container, false);
 
-        UserEmail = MainAppFragmentArgs.fromBundle(getArguments()).getUserEmail();
+        UserEmail = EditDetailsFragmentArgs.fromBundle(getArguments()).getUserEmail();
 
         NameEt = view.findViewById(R.id.name_edit_et);
         EmailEt = view.findViewById(R.id.email_edit_et);
@@ -50,7 +51,7 @@ public class EditDetailsFragment extends Fragment {
         SaveDetailsBtn = view.findViewById(R.id.save_edit_btn);
         progressBar=view.findViewById(R.id.edit_progressBar);
         progressBar.setVisibility(ViewGroup.GONE);
-
+        EmailEt.setEnabled(false);
         PerformUserFields();
 
 
@@ -87,10 +88,14 @@ public class EditDetailsFragment extends Fragment {
         adapter = new MyAdapter();
         list.setAdapter(adapter);
 
+
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override //click on item and what will heppen
             public void onItemClick(int position, View v) {
-
+                Post p = posts.get(position);
+                foodId = p.getFoodName()+p.getOwner();
+                EditDetailsFragmentDirections.ActionEditDetailsFragmentToEditPostFragment action = EditDetailsFragmentDirections.actionEditDetailsFragmentToEditPostFragment(foodId);
+                Navigation.findNavController(v).navigate(action);
             }
         });
 
@@ -106,6 +111,7 @@ public class EditDetailsFragment extends Fragment {
         refreshData();
         return view;
     }
+
  //ot right function just to check
     private void refreshData() {
         Model.instance.GetPostsByEmail(UserEmail,new Model.GetPostsByEmailListener() {
@@ -131,13 +137,13 @@ public class EditDetailsFragment extends Fragment {
     class MyViewHolder extends RecyclerView.ViewHolder{
         TextView FoodName;
         TextView FoodDescription;
-        CheckBox Profile;
+        //CheckBox Profile;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             FoodName = itemView.findViewById(R.id.post_food_name);
             FoodDescription = itemView.findViewById(R.id.post_food_description);
-            Profile = itemView.findViewById(R.id.post_cb);
+            //Profile = itemView.findViewById(R.id.post_cb);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -202,8 +208,9 @@ public class EditDetailsFragment extends Fragment {
     public void SavePostDetails(){
         DescriptionStr = Description.getText().toString();
         FoodNameStr= FoodName.getText().toString();
+        foodId=FoodNameStr+UserEmail;
         Post post= new Post(UserEmail,FoodNameStr,DescriptionStr);
-        Model.instance.addPost(post,FoodNameStr+UserEmail,()->{
+        Model.instance.addPost(post,foodId,()->{
         });
 
     }

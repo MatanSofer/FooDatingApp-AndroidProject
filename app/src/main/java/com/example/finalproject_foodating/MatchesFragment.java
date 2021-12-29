@@ -24,7 +24,7 @@ public class MatchesFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_matches, container, false);
         setHasOptionsMenu(true);
-        UserEmail = MainAppFragmentArgs.fromBundle(getArguments()).getUserEmail();
+        UserEmail = MatchesFragmentArgs.fromBundle(getArguments()).getUserEmail();
         return view;
     }
     @Override

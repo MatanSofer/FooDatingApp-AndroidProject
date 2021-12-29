@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ public class RegisterFragment extends Fragment {
     EditText NameEt,EmailEt,Password;
     ProgressBar progressBar;
     String UserName,UserPassword,UserEmail,UserGender;
+
+
    // Boolean AllFieldCompleted=false;
 
     @Override
@@ -50,9 +53,18 @@ public class RegisterFragment extends Fragment {
         RegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(ViewGroup.VISIBLE);
-                RegisterBtn.setEnabled(false);
-                SaveUserFields();
+                if(SaveUserFields()){
+                    progressBar.setVisibility(ViewGroup.VISIBLE);
+                    RegisterBtn.setEnabled(false);
+                    User user = new User(UserName,UserPassword,UserEmail,UserGender);
+                    Model.instance.addUser(user,()->{
+                        RegisterFragmentDirections.ActionRegisterFragmentToMainAppFragment action = RegisterFragmentDirections.actionRegisterFragmentToMainAppFragment(UserEmail);
+                        Navigation.findNavController(view).navigate(action);
+                    });
+
+                }
+
+               //SaveUserFields();
                 //Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_mainAppFragment);
 
 
@@ -65,24 +77,19 @@ public class RegisterFragment extends Fragment {
           return view;
 
     }
-    public void SaveUserFields(){
+    public boolean SaveUserFields(){
+        boolean isValid=true;
 
         UserName = NameEt.getText().toString();
         UserPassword = Password.getText().toString();
         UserEmail = EmailEt.getText().toString();
-        if(MaleGenderBtn.isChecked())
-        {
-            UserGender="male";
-        }
-        else
-        {
-            UserGender="female";
-        }
+
 
         if(TextUtils.isEmpty(UserName)) {
         //    AllFieldCompleted=false;
             NameEt.setError("Please Fill Your Name");
             Toast.makeText(getActivity(),"Missing Name , Try Again!",Toast.LENGTH_LONG).show();
+            isValid=false;
 //            Navigation.findNavController(view)
 //                    .navigate(R.id.action_registerFragment_self);
         }
@@ -90,6 +97,7 @@ public class RegisterFragment extends Fragment {
         //    AllFieldCompleted=false;
             Password.setError("Please Fill Your Name");
             Toast.makeText(getActivity(),"Missing Password , Try Again!",Toast.LENGTH_LONG).show();
+            isValid=false;
 //            Navigation.findNavController(view)
 //                    .navigate(R.id.action_registerFragment_self);
 
@@ -98,16 +106,28 @@ public class RegisterFragment extends Fragment {
          //   AllFieldCompleted=false;
             EmailEt.setError("Please Fill Your Email");
             Toast.makeText(getActivity(),"Missing Email , Try Again!",Toast.LENGTH_LONG).show();
+            isValid=false;
 //            Navigation.findNavController(view)
 //                    .navigate(R.id.action_registerFragment_self);
 
         }
+        if(MaleGenderBtn.isChecked())
+        {
+            UserGender="male";
+        }
+        else if(FemaleGenderBtn.isChecked())
+        {
+            UserGender="female";
+        }
+        else{
+            Toast.makeText(getActivity(),"Missing Gender , Try Again!",Toast.LENGTH_LONG).show();
+            isValid=false;
+        }
 
-        User user = new User(UserName,UserPassword,UserEmail,UserGender);
-        Model.instance.addUser(user,()->{
-            RegisterFragmentDirections.ActionRegisterFragmentToMainAppFragment action = RegisterFragmentDirections.actionRegisterFragmentToMainAppFragment(UserEmail);
-            Navigation.findNavController(view).navigate(action);
-        });
+
+
+        //Log.d("finalres",String.valueOf(isValid));
+        return isValid;
     }
 
 }
