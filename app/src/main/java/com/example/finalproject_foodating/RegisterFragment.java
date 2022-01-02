@@ -58,7 +58,7 @@ public class RegisterFragment extends Fragment {
                     RegisterBtn.setEnabled(false);
                     User user = new User(UserName,UserPassword,UserEmail,UserGender);
                     Model.instance.addUser(user,()->{
-                        RegisterFragmentDirections.ActionRegisterFragmentToMainAppFragment action = RegisterFragmentDirections.actionRegisterFragmentToMainAppFragment(UserEmail);
+                        RegisterFragmentDirections.ActionRegisterFragmentToMainAppFragment action = RegisterFragmentDirections.actionRegisterFragmentToMainAppFragment(UserEmail,"");
                         Navigation.findNavController(view).navigate(action);
                     });
 

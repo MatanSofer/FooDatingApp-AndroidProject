@@ -14,6 +14,7 @@ public class User {
     public String Email="";
     public String Password="";
     public String Gender ="";
+    public String ImageURL ="";
     //public List<User> Likes =new LinkedList<>();
     List<String> TheUserLikes = new ArrayList<>();
     List<String> TheUserDisLikes = new ArrayList<>();
@@ -72,7 +73,12 @@ public class User {
     public void setGender(String gender) {
         this.Gender = gender;
     }
-    
+    public String getImageURL(){ return this.ImageURL;}
+
+    public void setImageURL(String imageURL) {
+        this.ImageURL = imageURL;
+    }
+
     public Map<String,Object> toJson(){
 
         // Create a new user with different fields
@@ -83,6 +89,7 @@ public class User {
         json.put("gender",getGender());
         json.put("user_dislike",getUserDisLikes());
         json.put("user_likes",getUserLikes());
+        json.put("imageURL",getImageURL());
         return json;
     }
     static User fromJson(Map<String,Object> json ){
@@ -90,10 +97,12 @@ public class User {
         String name1 = (String)json.get("name");
         String password1 = (String)json.get("password");
         String gender1 = (String)json.get("gender");
+        String imageURL = (String) json.get("imageURL");
         List<String> TheUserLikes = (List<String>)json.get("user_likes");
         List<String> TheUserDisLikes = (List<String>)json.get("user_dislike");
 
         User user = new User(name1,password1,email1,gender1,TheUserLikes,TheUserDisLikes);
+        user.setImageURL(imageURL);
         return user;
 
     }

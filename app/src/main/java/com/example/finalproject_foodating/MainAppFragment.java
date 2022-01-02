@@ -29,7 +29,7 @@ import java.util.List;
 
 public class MainAppFragment extends Fragment {
     View view;
-    String UserEmail,CurrentScreenUserEmail;
+    String UserEmail,CurrentScreenUserEmail,UserImageURL;
     User CurrentScreenUser;
     Boolean LikeOrDislike;
     ImageButton LikeBtn,DislikeBtn;
@@ -49,9 +49,8 @@ public class MainAppFragment extends Fragment {
          setHasOptionsMenu(true);
 
         UserEmail = MainAppFragmentArgs.fromBundle(getArguments()).getUserEmail();
+         UserImageURL =MainAppFragmentArgs.fromBundle(getArguments()).getUserImageURL();
         forcheck = view.findViewById(R.id.useremailcheck);
-
-
 
         getAllusers();
 
@@ -70,8 +69,6 @@ public class MainAppFragment extends Fragment {
                 Dislike();
             }
         });
-
-
 
          return view;
 
@@ -125,11 +122,11 @@ public class MainAppFragment extends Fragment {
         Model.instance.EditUserLikes(LikeOrDislike,UserEmail,CurrentScreenUserEmail,()->{
             if(CurrentScreenUser.getUserLikes().contains(UserEmail)){
                 Toast.makeText(getActivity(),"There is a match with " +CurrentScreenUser.getName() ,Toast.LENGTH_LONG).show();
-                MainAppFragmentDirections.ActionMainAppFragmentToMatchesFragment action =MainAppFragmentDirections.actionMainAppFragmentToMatchesFragment(UserEmail);
+                MainAppFragmentDirections.ActionMainAppFragmentToMatchesFragment action =MainAppFragmentDirections.actionMainAppFragmentToMatchesFragment(UserEmail,UserImageURL);
                 Navigation.findNavController(view).navigate(action);
             }
             else{
-                MainAppFragmentDirections.ActionMainAppFragmentSelf action =MainAppFragmentDirections.actionMainAppFragmentSelf(UserEmail);
+                MainAppFragmentDirections.ActionMainAppFragmentSelf action =MainAppFragmentDirections.actionMainAppFragmentSelf(UserEmail,UserImageURL);
                 Navigation.findNavController(view).navigate(action);
             }
 
@@ -140,15 +137,11 @@ public class MainAppFragment extends Fragment {
         LikeOrDislike=false;
         Model.instance.EditUserLikes(LikeOrDislike,UserEmail,CurrentScreenUserEmail,()->{
 
-            MainAppFragmentDirections.ActionMainAppFragmentSelf action =MainAppFragmentDirections.actionMainAppFragmentSelf(UserEmail);
+            MainAppFragmentDirections.ActionMainAppFragmentSelf action =MainAppFragmentDirections.actionMainAppFragmentSelf(UserEmail,UserImageURL);
             Navigation.findNavController(view).navigate(action);
 
         });
     }
-
-
-
-
 
 
 
@@ -162,10 +155,10 @@ public class MainAppFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.profile_menu_btn:
-                Navigation.findNavController(view).navigate(MainAppFragmentDirections.actionMainAppFragmentToProfileFragment(UserEmail));
+                Navigation.findNavController(view).navigate(MainAppFragmentDirections.actionMainAppFragmentToProfileFragment(UserEmail,UserImageURL));
                 break;
             case R.id.messages_menu_btn:
-                Navigation.findNavController(view).navigate(MainAppFragmentDirections.actionMainAppFragmentToMatchesFragment(UserEmail));
+                Navigation.findNavController(view).navigate(MainAppFragmentDirections.actionMainAppFragmentToMatchesFragment(UserEmail,UserImageURL));
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -173,13 +166,6 @@ public class MainAppFragment extends Fragment {
         }
         return true;
     }
-
-
-
-
-
-
-
 
 
 }

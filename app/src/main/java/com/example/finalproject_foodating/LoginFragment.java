@@ -28,9 +28,9 @@ public class LoginFragment extends Fragment {
     EditText EmailEt,Password;
     Button loginBtn;
     ProgressBar progressBar;
-    String UserPassword,UserEmail;
+    String UserPassword,UserEmail,UserImageURL;
     View view;
-    User u1;
+    public User u1;
     boolean isValid1;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,14 +45,20 @@ public class LoginFragment extends Fragment {
 
         progressBar.setVisibility(ViewGroup.GONE);
 
+
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(SaveFields()&&CheckIfDetailsCorrect()){
-                    progressBar.setVisibility(ViewGroup.VISIBLE);
-                    loginBtn.setEnabled(false);
-                    LoginFragmentDirections.ActionLoginFragmentToMainAppFragment action = LoginFragmentDirections.actionLoginFragmentToMainAppFragment(UserEmail);
-                    Navigation.findNavController(view).navigate(action);
+                if(SaveFields()&&CheckIfDetailsCorrect())
+                {
+
+                    Model.instance.GetUserByEmail(UserEmail,(user)->{
+                        progressBar.setVisibility(ViewGroup.VISIBLE);
+                        loginBtn.setEnabled(false);
+                        LoginFragmentDirections.ActionLoginFragmentToMainAppFragment action = LoginFragmentDirections.actionLoginFragmentToMainAppFragment(UserEmail,user.getImageURL());
+                        Navigation.findNavController(view).navigate(action);
+                    });
+
                 }
 
 
@@ -67,6 +73,8 @@ public class LoginFragment extends Fragment {
         boolean isValid = true;
         UserPassword = Password.getText().toString();
         UserEmail = EmailEt.getText().toString();
+
+
 
         if(TextUtils.isEmpty(UserEmail)) {
             EmailEt.setError("Please Fill Your Email");

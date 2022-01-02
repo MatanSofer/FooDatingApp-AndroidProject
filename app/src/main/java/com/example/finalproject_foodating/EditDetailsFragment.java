@@ -1,10 +1,14 @@
 package com.example.finalproject_foodating;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -19,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.finalproject_foodating.model.Model;
 import com.example.finalproject_foodating.model.Post;
@@ -36,21 +41,38 @@ public class EditDetailsFragment extends Fragment {
     String foodId;
     View view;
     MyAdapter adapter;
-    List<Post> posts = new LinkedList<Post>();
+    SwipeRefreshLayout swipeRefreshLayout;
+    RecyclerView list;
+    EditDetailsFragmentViewModel viewModel;
     //SwipeRefreshLayout swipeRefresh;
+
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        viewModel = new ViewModelProvider(this).get(EditDetailsFragmentViewModel.class);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view =inflater.inflate(R.layout.fragment_edit_details, container, false);
+        view = inflater.inflate(R.layout.fragment_edit_details, container, false);
 
         UserEmail = EditDetailsFragmentArgs.fromBundle(getArguments()).getUserEmail();
-
         NameEt = view.findViewById(R.id.name_edit_et);
         EmailEt = view.findViewById(R.id.email_edit_et);
         Password = view.findViewById(R.id.password_edit_et);
         SaveDetailsBtn = view.findViewById(R.id.save_edit_btn);
-        progressBar=view.findViewById(R.id.edit_progressBar);
+        progressBar = view.findViewById(R.id.edit_progressBar);
         progressBar.setVisibility(ViewGroup.GONE);
+        swipeRefreshLayout = view.findViewById(R.id.EditFrag_Refresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         EmailEt.setEnabled(false);
         PerformUserFields();
 
@@ -75,63 +97,58 @@ public class EditDetailsFragment extends Fragment {
         });
 
 
-
-
-
         //get all the posts the user owns
 
-        RecyclerView list = view.findViewById(R.id.post_edit_rv);
+        list = view.findViewById(R.id.post_edit_rv);
         list.setHasFixedSize(true);
-
-        list.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        adapter = new MyAdapter();
-        list.setAdapter(adapter);
-
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        list.setLayoutManager(linearLayoutManager);
+        adapter = new MyAdapter(getContext());
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(list.getContext(), linearLayoutManager.getOrientation());
+        list.addItemDecoration(dividerItemDecoration);
 
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override //click on item and what will heppen
             public void onItemClick(int position, View v) {
-                Post p = posts.get(position);
-                foodId = p.getFoodName()+p.getOwner();
+                Post p = viewModel.getAllPosts().getValue().get(position);
+                foodId = p.getFoodName() + p.getOwner();
                 EditDetailsFragmentDirections.ActionEditDetailsFragmentToEditPostFragment action = EditDetailsFragmentDirections.actionEditDetailsFragmentToEditPostFragment(foodId);
                 Navigation.findNavController(v).navigate(action);
             }
         });
-
+        list.setAdapter(adapter);
 //        swipeRefresh = view.findViewById(R.id.studentlist_swipe_refresh);
-//        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                refreshData();
-//            }
-//        });
+        //       swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
-       // setHasOptionsMenu(true);
-        refreshData();
+        // setHasOptionsMenu(true);
+        if (viewModel.getAllPosts() == null){
+            refreshData();
+        }
+
+        viewModel.getAllPosts().observe(getViewLifecycleOwner(),(postList)->{
+            adapter.notifyDataSetChanged();
+        });
+
         return view;
     }
 
- //ot right function just to check
-    private void refreshData() {
-        Model.instance.GetPostsByEmail(UserEmail,new Model.GetPostsByEmailListener() {
-            @Override
-            public void onComplete(List<Post> p) {
-                posts = p;
-                adapter.notifyDataSetChanged();
-//                if (swipeRefresh.isRefreshing()) {
-//                    swipeRefresh.setRefreshing(false);
-//                }
-            }
-        });
+        private void refreshData() {
+//            swipeRefreshLayout.setRefreshing(true);
+
+//        Model.instance.GetPostsByEmail(UserEmail,new Model.GetPostsByEmailListener() {
+//            @Override
+//            public void onComplete(List<Post> p) {
+//                 viewModel.setPostsList(p);
+//                adapter.notifyDataSetChanged();
+//                swipeRefreshLayout.setRefreshing(false);
+////                if (swipeRefresh.isRefreshing()) {
+////                    swipeRefresh.setRefreshing(false);
+////                }
+//            }
+//        });
     }
 
 
-//    @Override
-//    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-//        super.onCreateOptionsMenu(menu, inflater);
-//        inflater.inflate(R.menu.student_list_menu,menu);
-//    }
 
 
     class MyViewHolder extends RecyclerView.ViewHolder{
@@ -160,8 +177,12 @@ public class EditDetailsFragment extends Fragment {
         void onItemClick(int position, View v);
     }
     class MyAdapter extends RecyclerView.Adapter<MyViewHolder>{
-
+        LayoutInflater inflater;
         OnItemClickListener listener;
+        public MyAdapter(Context context)
+        {
+            this.inflater = LayoutInflater.from(context);
+        }
         public void setOnItemClickListener(OnItemClickListener listener){
             this.listener = listener;
         }
@@ -169,22 +190,24 @@ public class EditDetailsFragment extends Fragment {
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = getLayoutInflater().inflate(R.layout.user_post,parent,false);
-            MyViewHolder holder = new MyViewHolder(view,listener);
-            return holder;
+            View view = inflater.inflate(R.layout.user_post,parent,false);
+            return new MyViewHolder(view,listener);
         }
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            Post post = posts.get(position);
-            holder.FoodName.setText(post.FoodName);
+            Post post = viewModel.getAllPosts().getValue().get(position);
+            holder.FoodName.setText(post.getFoodName());
             holder.FoodDescription.setText(post.getDescription());
             //holder.Profile.setChecked(post.isFlag());
         }
 
         @Override
         public int getItemCount() {
-            return posts.size();
+            if(viewModel.getAllPosts() ==null) {
+                return 0;
+            }
+            return viewModel.getAllPosts().getValue().size();
         }
     }
 
@@ -210,7 +233,9 @@ public class EditDetailsFragment extends Fragment {
         FoodNameStr= FoodName.getText().toString();
         foodId=FoodNameStr+UserEmail;
         Post post= new Post(UserEmail,FoodNameStr,DescriptionStr);
-        Model.instance.addPost(post,foodId,()->{
+        viewModel.getAllPosts().getValue().add(0,post);
+        Toast.makeText(getContext(),"Post Saved",Toast.LENGTH_SHORT).show();
+        Model.instance.addPost(post,foodId,0,()->{
         });
 
     }

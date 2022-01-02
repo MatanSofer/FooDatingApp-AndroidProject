@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 
 public class MatchesFragment extends Fragment {
-    String UserEmail;
+    String UserEmail,UserImageURL;
     View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -25,6 +25,7 @@ public class MatchesFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_matches, container, false);
         setHasOptionsMenu(true);
         UserEmail = MatchesFragmentArgs.fromBundle(getArguments()).getUserEmail();
+        UserImageURL = MatchesFragmentArgs.fromBundle(getArguments()).getUserImageURL();
         return view;
     }
     @Override
@@ -37,10 +38,10 @@ public class MatchesFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.mainApp_menu_btn:
-                Navigation.findNavController(view).navigate(MatchesFragmentDirections.actionMatchesFragmentToMainAppFragment(UserEmail));
+                Navigation.findNavController(view).navigate(MatchesFragmentDirections.actionMatchesFragmentToMainAppFragment(UserEmail,UserImageURL));
                 break;
             case R.id.profile_menu_btn:
-                Navigation.findNavController(view).navigate(MatchesFragmentDirections.actionMatchesFragmentToProfileFragment(UserEmail));
+                Navigation.findNavController(view).navigate(MatchesFragmentDirections.actionMatchesFragmentToProfileFragment(UserEmail,UserImageURL));
                 break;
             default:
                 return super.onOptionsItemSelected(item);

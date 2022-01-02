@@ -37,7 +37,7 @@
         android:layout_width="0dp"
         android:layout_height="46dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="casual"
         android:text="Name :"
         android:textSize="30sp"

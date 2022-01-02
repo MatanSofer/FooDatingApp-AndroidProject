@@ -1,5 +1,7 @@
 package com.example.finalproject_foodating.model;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -13,7 +15,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,6 +29,9 @@ public class ModelFireBase {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     List<String> AllUsersLikes = new LinkedList<String>();
     List<String> AllUserDislikes = new LinkedList<String>();
+
+
+
     //if inside the fragment will be import  firebase -10 points
     //because if the fragment want access to db it should be through the model
     public void getAllUsers(Model.GetAllUsersListener listener) {
@@ -85,6 +94,16 @@ public class ModelFireBase {
                     listener.onComplete(null);
                 }
             }
+        });
+    }
+
+
+
+    public void setUserImageURL(String UserEmail, String UserImageURL, Model.SetUserImageUrlListener listener)
+    {
+        DocumentReference EditUser = db.collection("user").document(UserEmail);
+        EditUser.update("imageURL",UserImageURL).addOnSuccessListener((successListener)->{
+            listener.onComplete();
         });
     }
 
@@ -218,6 +237,26 @@ public class ModelFireBase {
                 listener.onComplete(null);
             }
         });
+    }
+
+    public void saveImage(String UserEmail,Bitmap bitmap, Model.SaveImageListener listener) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+
+        StorageReference storageRef = storage.getReference();
+        StorageReference imageRef = storageRef.child(""+UserEmail);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = imageRef.putBytes(data);
+        uploadTask.addOnFailureListener(e -> listener.onComplete(null))
+                .addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl()
+                        .addOnSuccessListener(uri -> {
+            Uri downloadurl = uri;
+            listener.onComplete(downloadurl.toString());
+        }));
+
     }
 }
 

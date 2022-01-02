@@ -58,6 +58,9 @@
         <action
             android:id="@+id/action_mainAppFragment_self"
             app:destination="@id/mainAppFragment" />
+        <argument
+            android:name="userImageURL"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -71,13 +74,19 @@
             android:id="@+id/action_profileFragment_to_mainAppFragment"
             app:destination="@id/mainAppFragment" />
         <action
-            android:id="@+id/action_profileFragment_to_editDetailsFragment"
-            app:destination="@id/editDetailsFragment" />
-        <action
             android:id="@+id/action_profileFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
         <argument
             android:name="userEmail"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_profileFragment_to_editDetailsFragment2"
+            app:destination="@id/editDetailsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_editDetailsFragment"
+            app:destination="@id/editDetailsFragment" />
+        <argument
+            android:name="userImageURL"
             app:argType="string" />
     </fragment>
     <fragment
@@ -97,12 +106,15 @@
         <argument
             android:name="userEmail"
             app:argType="string" />
+        <argument
+            android:name="userImageURL"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/editDetailsFragment"
         android:name="com.example.finalproject_foodating.EditDetailsFragment"
-        android:label="Edit details"
-        tools:layout="@layout/fragment_edit_details" >
+        android:label="Edit details "
+        tools:layout="@layout/fragment_edit_details">
         <argument
             android:name="userEmail"
             app:argType="string" />
@@ -138,5 +150,14 @@
         <action
             android:id="@+id/action_editPostFragment_to_editDetailsFragment"
             app:destination="@id/editDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editDetailsFragment1"
+        android:name="com.example.finalproject_foodating.EditDetailsFragment1"
+        android:label="Edit details  - new"
+        tools:layout="@layout/fragment_edit_details_new" >
+        <argument
+            android:name="userEmail"
+            app:argType="string" />
     </fragment>
 </navigation>

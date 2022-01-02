@@ -9,7 +9,7 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/mainApp_menu_btn"
-        android:icon="@drawable/fireicon"
+        android:icon="@drawable/pizzaicon1"
         android:title="MainAppScreenBtn"
         app:showAsAction="always" />
     <item

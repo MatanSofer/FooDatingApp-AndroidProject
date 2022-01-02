@@ -97,7 +97,7 @@ public class EditPostFragment extends Fragment {
 
         Post post= new Post(Owner,foodname,fooddescription);
 
-        Model.instance.addPost(post,foodId,()->{
+        Model.instance.addPost(post,foodId,0,()->{
         });
 
 
