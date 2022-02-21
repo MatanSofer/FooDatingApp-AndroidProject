@@ -26,7 +26,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.finalproject_foodating.model.Model;
+import com.example.finalproject_foodating.model.ModelFireBase;
 import com.example.finalproject_foodating.model.Post;
+import com.example.finalproject_foodating.model.User;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -36,6 +38,7 @@ public class EditDetailsFragment extends Fragment {
     Button SaveDetailsBtn,SavePostBtn;
     EditText NameEt,EmailEt,Password,FoodName,Description;
     ProgressBar progressBar;
+    User user;
     String UserNewName,UserNewPassword,UserNewEmail,DescriptionStr,FoodNameStr;
     String UserEmail ;
     String foodId;
@@ -57,8 +60,8 @@ public class EditDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_edit_details, container, false);
+        user= ModelFireBase.getCurrentUserObj();
 
-        UserEmail = EditDetailsFragmentArgs.fromBundle(getArguments()).getUserEmail();
         NameEt = view.findViewById(R.id.name_edit_et);
         EmailEt = view.findViewById(R.id.email_edit_et);
         Password = view.findViewById(R.id.password_edit_et);
@@ -214,13 +217,14 @@ public class EditDetailsFragment extends Fragment {
 
 
     public void PerformUserFields(){
-        Model.instance.GetUserByEmail(UserEmail,(user)->{
+        Model.instance.GetUserById((user)->{
+          //  Password.setText("user.getpassword()");
             NameEt.setText(user.getName());
             EmailEt.setText(user.getEmail());
         });
     }
     public void SaveUserDetails(){
-       // UserEmail=EmailEt.getText().toString();
+        UserEmail=EmailEt.getText().toString();
         UserNewName = NameEt.getText().toString();
         UserNewPassword= Password.getText().toString();
         UserNewEmail = EmailEt.getText().toString();
@@ -231,8 +235,8 @@ public class EditDetailsFragment extends Fragment {
     public void SavePostDetails(){
         DescriptionStr = Description.getText().toString();
         FoodNameStr= FoodName.getText().toString();
-        foodId=FoodNameStr+UserEmail;
-        Post post= new Post(UserEmail,FoodNameStr,DescriptionStr);
+        foodId=FoodNameStr+user.getUserId();
+        Post post= new Post(user.getUserId(),FoodNameStr,DescriptionStr);
         viewModel.getAllPosts().getValue().add(0,post);
         Toast.makeText(getContext(),"Post Saved",Toast.LENGTH_SHORT).show();
         Model.instance.addPost(post,foodId,0,()->{

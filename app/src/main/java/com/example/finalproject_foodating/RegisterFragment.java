@@ -2,6 +2,7 @@ package com.example.finalproject_foodating;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -18,6 +19,11 @@ import android.widget.Toast;
 
 import com.example.finalproject_foodating.model.Model;
 import com.example.finalproject_foodating.model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 public class RegisterFragment extends Fragment {
@@ -27,13 +33,13 @@ public class RegisterFragment extends Fragment {
     EditText NameEt,EmailEt,Password;
     ProgressBar progressBar;
     String UserName,UserPassword,UserEmail,UserGender;
+    private FirebaseAuth mAuth;
 
-
-   // Boolean AllFieldCompleted=false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mAuth = FirebaseAuth.getInstance();
         // Inflate the layout for this fragment
         view =inflater.inflate(R.layout.fragment_register, container, false);
 
@@ -48,68 +54,67 @@ public class RegisterFragment extends Fragment {
         progressBar.setVisibility(ViewGroup.GONE);
 
 
-       // RegisterBtn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_registerFragment_to_mainAppFragment));
+
 
         RegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(SaveUserFields()){
-                    progressBar.setVisibility(ViewGroup.VISIBLE);
-                    RegisterBtn.setEnabled(false);
-                    User user = new User(UserName,UserPassword,UserEmail,UserGender);
-                    Model.instance.addUser(user,()->{
-                        RegisterFragmentDirections.ActionRegisterFragmentToMainAppFragment action = RegisterFragmentDirections.actionRegisterFragmentToMainAppFragment(UserEmail,"");
-                        Navigation.findNavController(view).navigate(action);
-                    });
-
-                }
-
-               //SaveUserFields();
-                //Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_mainAppFragment);
-
-
+                register();
             }
         });
 
 
-          // Missing DB update/saving data + Checking if user filled attributes properly/Checking if user already had registered
-        //Possibility to add a Toast message
           return view;
 
     }
+    public void register(){
+        if(SaveUserFields()){
+            mAuth.createUserWithEmailAndPassword(UserEmail,UserPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(getActivity(),"Registered successfully!",Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(ViewGroup.VISIBLE);
+                            RegisterBtn.setEnabled(false);
+                            User user = new User(UserName,UserEmail,UserGender);
+
+                            Model.instance.addUser(user,()->{
+                                Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_mainAppFragment);
+                            });
+                        }
+                        else{
+                            Toast.makeText(getActivity(),"Registered Failed"+task.getException().getMessage(),Toast.LENGTH_LONG).show();
+                        }
+
+                }
+            });
+
+
+
+        }
+    }
+
     public boolean SaveUserFields(){
         boolean isValid=true;
-
         UserName = NameEt.getText().toString();
         UserPassword = Password.getText().toString();
         UserEmail = EmailEt.getText().toString();
 
-
         if(TextUtils.isEmpty(UserName)) {
-        //    AllFieldCompleted=false;
             NameEt.setError("Please Fill Your Name");
             Toast.makeText(getActivity(),"Missing Name , Try Again!",Toast.LENGTH_LONG).show();
             isValid=false;
-//            Navigation.findNavController(view)
-//                    .navigate(R.id.action_registerFragment_self);
         }
         else if(TextUtils.isEmpty(UserPassword)) {
-        //    AllFieldCompleted=false;
+
             Password.setError("Please Fill Your Name");
             Toast.makeText(getActivity(),"Missing Password , Try Again!",Toast.LENGTH_LONG).show();
             isValid=false;
-//            Navigation.findNavController(view)
-//                    .navigate(R.id.action_registerFragment_self);
-
         }
         else if(TextUtils.isEmpty(UserEmail)) {
-         //   AllFieldCompleted=false;
             EmailEt.setError("Please Fill Your Email");
             Toast.makeText(getActivity(),"Missing Email , Try Again!",Toast.LENGTH_LONG).show();
             isValid=false;
-//            Navigation.findNavController(view)
-//                    .navigate(R.id.action_registerFragment_self);
-
         }
         if(MaleGenderBtn.isChecked())
         {
@@ -124,9 +129,6 @@ public class RegisterFragment extends Fragment {
             isValid=false;
         }
 
-
-
-        //Log.d("finalres",String.valueOf(isValid));
         return isValid;
     }
 

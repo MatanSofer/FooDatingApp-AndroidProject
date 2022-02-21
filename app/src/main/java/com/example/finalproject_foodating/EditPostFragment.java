@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.example.finalproject_foodating.model.Model;
+import com.example.finalproject_foodating.model.ModelFireBase;
 import com.example.finalproject_foodating.model.Post;
 
 
@@ -31,8 +32,8 @@ public class EditPostFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_edit_post, container, false);
+
         FoodPostId=EditPostFragmentArgs.fromBundle(getArguments()).getFoodId();
-        Log.d("foodclicked",FoodPostId);
         foodNameEt= view.findViewById(R.id.foodname_editpost_et);
         descriptionEt = view.findViewById(R.id.description_editpost_et);
         ownerEt = view.findViewById(R.id.owner_editpost_et);
@@ -43,11 +44,9 @@ public class EditPostFragment extends Fragment {
        Model.instance.GetPostByFoodId(FoodPostId,(post)->{
            foodNameEt.setText(post.getFoodName());
            descriptionEt.setText(post.getDescription());
-           ownerEt.setText(post.getOwner());
+           ownerEt.setText(ModelFireBase.getCurrentUserObj().getName());
            Owner = post.getOwner();
        });
-
-
 
 
         SaveBtn = view.findViewById(R.id.save_edit_post_btn);
@@ -57,12 +56,7 @@ public class EditPostFragment extends Fragment {
                 progressBar.setVisibility(ViewGroup.VISIBLE);
                 SaveBtn.setEnabled(false);
                 DeleteBtn.setEnabled(false);
-
-               // saveEdit();
-
-                EditPostFragmentDirections.ActionEditPostFragmentToEditDetailsFragment action = EditPostFragmentDirections.actionEditPostFragmentToEditDetailsFragment(Owner);
-                Navigation.findNavController(v).navigate(action);
-
+                Navigation.findNavController(view).navigate(R.id.action_editPostFragment_to_editDetailsFragment);
             }
         });
 
@@ -73,18 +67,10 @@ public class EditPostFragment extends Fragment {
                 progressBar.setVisibility(ViewGroup.VISIBLE);
                 SaveBtn.setEnabled(false);
                 DeleteBtn.setEnabled(false);
-
-                // saveDelete();
-
-                EditPostFragmentDirections.ActionEditPostFragmentToEditDetailsFragment action = EditPostFragmentDirections.actionEditPostFragmentToEditDetailsFragment(Owner);
-                Navigation.findNavController(v).navigate(action);
+                Navigation.findNavController(view).navigate(R.id.action_editPostFragment_to_editDetailsFragment);
 
             }
         });
-
-
-
-
 
        return view;
     }
@@ -92,14 +78,9 @@ public class EditPostFragment extends Fragment {
     public void saveEdit(){
         String fooddescription = descriptionEt.getText().toString();
         String foodname = foodNameEt.getText().toString();
-
-       String foodId = foodname+Owner;
-
+        String foodId = foodname+Owner;
         Post post= new Post(Owner,foodname,fooddescription);
-
         Model.instance.addPost(post,foodId,0,()->{
         });
-
-
     }
 }

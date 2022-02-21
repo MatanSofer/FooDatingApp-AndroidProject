@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,11 +39,11 @@ public class Model {
     }
 
 
-    public interface GetUserByEmailListener{
+    public interface GetUserByIdListener{
         void onComplete(User user);
     }
-    public void GetUserByEmail(String UserEmail ,GetUserByEmailListener listener){
-        modelFireBase.GetUserByEmail(UserEmail ,listener);
+    public void GetUserById( GetUserByIdListener listener){
+        modelFireBase.GetUserById(listener);
     }
 
 
@@ -58,7 +60,6 @@ public class Model {
         modelFireBase.getAllPosts((list)->{
             AllPostsListLD.setValue(list);
         });
-
     }
 
     public LiveData<List<Post>> GetAllPosts()
@@ -76,11 +77,11 @@ public class Model {
         });
     }
 
-    public interface GetPostsByEmailListener{
+    public interface GetPostsByIdListener{
         void onComplete(List<Post> posts);
     }
-    public void GetPostsByEmail(String UserEmail ,GetPostsByEmailListener listener){
-        modelFireBase.GetPostsByEmail(UserEmail ,listener);
+    public void GetPostsById(String UserId,GetPostsByIdListener listener){
+        modelFireBase.GetPostsById(UserId ,listener);
 
     }
 
@@ -104,12 +105,12 @@ public class Model {
 //    {
 //        ModelFireBase.getUserImageURL(UserEmail,listener);
 //    }
-    public interface EditUserLikesListener{
-        void onComplete();
-    }
-    public void EditUserLikes(Boolean LikeOrDislike,String UserEmail,String LikeOrDislikeUser,EditUserLikesListener listener){
-        modelFireBase.EditUserLikes(LikeOrDislike,UserEmail,LikeOrDislikeUser,listener);
-    }
+//    public interface EditUserLikesListener{
+//        void onComplete();
+//    }
+//    public void EditUserLikes(Boolean LikeOrDislike,String UserEmail,String LikeOrDislikeUser,EditUserLikesListener listener){
+//        modelFireBase.EditUserLikes(LikeOrDislike,UserEmail,LikeOrDislikeUser,listener);
+//    }
 
 
     public interface GetPostByFoodIdListener{

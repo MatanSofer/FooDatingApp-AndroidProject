@@ -3,13 +3,19 @@ package com.example.finalproject_foodating.model;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 
+import com.example.finalproject_foodating.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,9 +35,33 @@ public class ModelFireBase {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     List<String> AllUsersLikes = new LinkedList<String>();
     List<String> AllUserDislikes = new LinkedList<String>();
+    static FirebaseUser currentFirebaseUser ;
+    static FirebaseAuth mAuth;
+    //FirebaseUser currentUser = mAuth.getCurrentUser();
+    static String current;
+    static User user1;
+   // private FirebaseAuth mAuth;
 
+public static String getCurrentUser(){
+    mAuth = FirebaseAuth.getInstance();
+    currentFirebaseUser= mAuth.getCurrentUser();
+    if(currentFirebaseUser!=null){
+       current = FirebaseAuth.getInstance().getCurrentUser().getUid() ;}
+    else{current=null;}
+    if(current==null){Log.d("currenINGET","null");}
+    else{Log.d("currenINGET",current);}
 
-
+   return current;
+}
+public static FirebaseAuth getAuthUser(){
+    return mAuth;
+}
+    public static User getCurrentUserObj(){
+        Model.instance.GetUserById((user)->{
+               user1=user;
+        });
+        return user1;
+    }
     //if inside the fragment will be import  firebase -10 points
     //because if the fragment want access to db it should be through the model
     public void getAllUsers(Model.GetAllUsersListener listener) {
@@ -65,8 +95,9 @@ public class ModelFireBase {
     //THE LISTENER WHILL ALERT US WHEN USER HAS BEEN ADDED TO DB
     public void addUser(User RegisteredUser, Model.AddUserListener listener) {
 // Add a new document with a generated ID
+
         db.collection("user")
-                .document(RegisteredUser.getEmail()).set(RegisteredUser.toJson())
+                .document(RegisteredUser.getUserId()).set(RegisteredUser.toJson())
                 .addOnSuccessListener((successListener)-> {
                     listener.onComplete();
                 })
@@ -76,8 +107,10 @@ public class ModelFireBase {
 
     }
 
-    public void GetUserByEmail(String UserEmail, Model.GetUserByEmailListener listener) {
-        DocumentReference docRef = db.collection("user").document(UserEmail);
+    public void GetUserById( Model.GetUserByIdListener listener) {
+        DocumentReference docRef = db.collection("user").document(ModelFireBase.getCurrentUser());
+        Log.d("email", ModelFireBase.getCurrentUser());
+
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -119,38 +152,38 @@ public class ModelFireBase {
                     Log.d("TAG", e.getMessage());
                 });
     }
-    public void EditUserLikes(Boolean LikeOrDislike, String UserEmail,String LikeOrDislikeUser, Model.EditUserLikesListener listener){
-        DocumentReference EditUserLikes = db.collection("user").document(UserEmail);
-
-        Model.instance.GetUserByEmail(UserEmail,(user)->{
-            AllUsersLikes=user.getUserLikes();
-            AllUserDislikes = user.getUserDisLikes();
-
-        });
-        if(LikeOrDislike){
-            Log.d("Like",LikeOrDislikeUser);
-            AllUsersLikes.add(LikeOrDislikeUser);
-            Log.d("Like",AllUsersLikes.get(0));
-            EditUserLikes.update("gender", "adda");
-            EditUserLikes.update("user_likes",AllUsersLikes)
-                    .addOnSuccessListener((successListener)-> {
-                        listener.onComplete();
-                    })
-                    .addOnFailureListener((e)-> {
-                        Log.d("TAG", e.getMessage());
-                    });
-        }
-        else{
-                AllUserDislikes.add(LikeOrDislikeUser);
-                EditUserLikes.update("user_dislike", AllUserDislikes )
-                        .addOnSuccessListener((successListener)-> {
-                            listener.onComplete();
-                        })
-                        .addOnFailureListener((e)-> {
-                            Log.d("TAG", e.getMessage());
-                        });
-
-    }}
+//    public void EditUserLikes(Boolean LikeOrDislike, String UserEmail,String LikeOrDislikeUser, Model.EditUserLikesListener listener){
+//        DocumentReference EditUserLikes = db.collection("user").document(UserEmail);
+//
+//        Model.instance.GetUserById(UserEmail,(user)->{
+//            AllUsersLikes=user.getUserLikes();
+//            AllUserDislikes = user.getUserDisLikes();
+//
+//        });
+//        if(LikeOrDislike){
+//            Log.d("Like",LikeOrDislikeUser);
+//            AllUsersLikes.add(LikeOrDislikeUser);
+//            Log.d("Like",AllUsersLikes.get(0));
+//            EditUserLikes.update("gender", "adda");
+//            EditUserLikes.update("user_likes",AllUsersLikes)
+//                    .addOnSuccessListener((successListener)-> {
+//                        listener.onComplete();
+//                    })
+//                    .addOnFailureListener((e)-> {
+//                        Log.d("TAG", e.getMessage());
+//                    });
+//        }
+//        else{
+//                AllUserDislikes.add(LikeOrDislikeUser);
+//                EditUserLikes.update("user_dislike", AllUserDislikes )
+//                        .addOnSuccessListener((successListener)-> {
+//                            listener.onComplete();
+//                        })
+//                        .addOnFailureListener((e)-> {
+//                            Log.d("TAG", e.getMessage());
+//                        });
+//
+//    }}
 //////////////////////////////////////////////////////////////////////////////
 
 
@@ -211,7 +244,7 @@ public class ModelFireBase {
             }
         });
     }
-    public void GetPostsByEmail(String UserEmail, Model.GetPostsByEmailListener listener) {
+    public void GetPostsById(String UserId, Model.GetPostsByIdListener listener) {
         db.collection("posts").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -219,7 +252,7 @@ public class ModelFireBase {
                 if(task.isSuccessful()){
                     for (QueryDocumentSnapshot doc: task.getResult()){
                         Post p = Post.fromJson(doc.getData());
-                        if (p != null && p.getOwner().equals(UserEmail)) {
+                        if (p != null && p.getOwner().equals(UserId)) {
                             postsList.add(p); //add from document each user
                         }
                         else{

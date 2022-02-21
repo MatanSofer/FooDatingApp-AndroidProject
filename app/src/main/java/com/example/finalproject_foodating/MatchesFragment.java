@@ -13,19 +13,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.finalproject_foodating.model.ModelFireBase;
+import com.example.finalproject_foodating.model.User;
+
 
 public class MatchesFragment extends Fragment {
-    String UserEmail,UserImageURL;
+    User user;
     View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
+        user= ModelFireBase.getCurrentUserObj();
         view = inflater.inflate(R.layout.fragment_matches, container, false);
         setHasOptionsMenu(true);
-        UserEmail = MatchesFragmentArgs.fromBundle(getArguments()).getUserEmail();
-        UserImageURL = MatchesFragmentArgs.fromBundle(getArguments()).getUserImageURL();
+
         return view;
     }
     @Override
@@ -38,10 +40,11 @@ public class MatchesFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.mainApp_menu_btn:
-                Navigation.findNavController(view).navigate(MatchesFragmentDirections.actionMatchesFragmentToMainAppFragment(UserEmail,UserImageURL));
+                Navigation.findNavController(view).navigate(R.id.action_matchesFragment_to_mainAppFragment);
                 break;
             case R.id.profile_menu_btn:
-                Navigation.findNavController(view).navigate(MatchesFragmentDirections.actionMatchesFragmentToProfileFragment(UserEmail,UserImageURL));
+                Navigation.findNavController(view).navigate(R.id.action_matchesFragment_to_profileFragment);
+
                 break;
             default:
                 return super.onOptionsItemSelected(item);

@@ -48,27 +48,27 @@ public class MainAppFragment extends Fragment {
          view = inflater.inflate(R.layout.fragment_main_app, container, false);
          setHasOptionsMenu(true);
 
-        UserEmail = MainAppFragmentArgs.fromBundle(getArguments()).getUserEmail();
-         UserImageURL =MainAppFragmentArgs.fromBundle(getArguments()).getUserImageURL();
+        //UserEmail = MainAppFragmentArgs.fromBundle(getArguments()).getUserEmail();
+         //UserImageURL =MainAppFragmentArgs.fromBundle(getArguments()).getUserImageURL();
         forcheck = view.findViewById(R.id.useremailcheck);
 
-        getAllusers();
+        //getAllusers();
 
-        LikeBtn = (ImageButton)view.findViewById(R.id.likebtn);
-        LikeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Like();
-            }
-        });
+//        LikeBtn = (ImageButton)view.findViewById(R.id.likebtn);
+//        LikeBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Like();
+//            }
+//        });
 
-        DislikeBtn = (ImageButton)view.findViewById(R.id.dislikebtn);
-        DislikeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Dislike();
-            }
-        });
+//        DislikeBtn = (ImageButton)view.findViewById(R.id.dislikebtn);
+//        DislikeBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Dislike();
+//            }
+//        });
 
          return view;
 
@@ -77,71 +77,65 @@ public class MainAppFragment extends Fragment {
 
 
 //(Boolean LikeOrDislike,String UserEmail,String LikeOrDislikeUser,EditUserLikesListener listener)
-    public void getAllusers(){
-        Model.instance.GetUserByEmail(UserEmail,(user)->{
-            Model.instance.getAllUsers((data)->{
-                UsersList=data;
-                //forcheck.setText(UsersList.get(0).getEmail());
-                if(UsersList!=null){
-                    for(int i = 0 ; i <UsersList.size() ;i++){
-                        if(!(UsersList.get(i).getEmail().equals(UserEmail))){
-                            if(!(user.getUserLikes().contains(UsersList.get(i).getEmail())) && !(user.getUserDisLikes().contains(UsersList.get(i).getEmail()))){
-                                forcheck.setText(UsersList.get(i).getEmail());
-                                CurrentScreenUserEmail=UsersList.get(i).getEmail();
-                                CurrentScreenUser=UsersList.get(i);
-                                break;
-                            }
+//    public void getAllusers(){
+//        Model.instance.GetUserByEmail(UserEmail,(user)->{
+//            Model.instance.getAllUsers((data)->{
+//                UsersList=data;
+//                //forcheck.setText(UsersList.get(0).getEmail());
+//                if(UsersList!=null){
+//                    for(int i = 0 ; i <UsersList.size() ;i++){
+//                        if(!(UsersList.get(i).getEmail().equals(UserEmail))){
+//                            if(!(user.getUserLikes().contains(UsersList.get(i).getEmail())) && !(user.getUserDisLikes().contains(UsersList.get(i).getEmail()))){
+//                                forcheck.setText(UsersList.get(i).getEmail());
+//                                CurrentScreenUserEmail=UsersList.get(i).getEmail();
+//                                CurrentScreenUser=UsersList.get(i);
+//                                break;
+//                            }
+//
+//                        }
+//
+//                    }
+//
+//                }
+//                else{
+//                    forcheck.setText("NO USERS TO SHOW!");
+//                }
+//
+//
+//
+//            });
+//
+//        });
 
-                        }
-
-                    }
-
-                }
-                else{
-                    forcheck.setText("NO USERS TO SHOW!");
-                }
-
-
-
-            });
-
-        });
-        //Log.d("currentemail",n1.getEmail());
-
-
-            //Log.d("connect",UsersList.get(0).getEmail());
-//        for(int i = 0 ; i < UsersList.size() ; i++){
-//            AllEmailList.add(UsersList.get(i).getEmail());
-//        }
-    }
+  //  }
 
 
-    public void Like(){
-        LikeOrDislike=true;
-
-        Model.instance.EditUserLikes(LikeOrDislike,UserEmail,CurrentScreenUserEmail,()->{
-            if(CurrentScreenUser.getUserLikes().contains(UserEmail)){
-                Toast.makeText(getActivity(),"There is a match with " +CurrentScreenUser.getName() ,Toast.LENGTH_LONG).show();
-                MainAppFragmentDirections.ActionMainAppFragmentToMatchesFragment action =MainAppFragmentDirections.actionMainAppFragmentToMatchesFragment(UserEmail,UserImageURL);
-                Navigation.findNavController(view).navigate(action);
-            }
-            else{
-                MainAppFragmentDirections.ActionMainAppFragmentSelf action =MainAppFragmentDirections.actionMainAppFragmentSelf(UserEmail,UserImageURL);
-                Navigation.findNavController(view).navigate(action);
-            }
-
-        });
-
-    }
-    public void Dislike(){
-        LikeOrDislike=false;
-        Model.instance.EditUserLikes(LikeOrDislike,UserEmail,CurrentScreenUserEmail,()->{
-
-            MainAppFragmentDirections.ActionMainAppFragmentSelf action =MainAppFragmentDirections.actionMainAppFragmentSelf(UserEmail,UserImageURL);
-            Navigation.findNavController(view).navigate(action);
-
-        });
-    }
+//    public void Like(){
+//        LikeOrDislike=true;
+//
+//        Model.instance.EditUserLikes(LikeOrDislike,UserEmail,CurrentScreenUserEmail,()->{
+//            if(CurrentScreenUser.getUserLikes().contains(UserEmail)){
+//                Toast.makeText(getActivity(),"There is a match with " +CurrentScreenUser.getName() ,Toast.LENGTH_LONG).show();
+//                MainAppFragmentDirections.ActionMainAppFragmentToMatchesFragment action =MainAppFragmentDirections.actionMainAppFragmentToMatchesFragment(UserEmail,UserImageURL);
+//                Navigation.findNavController(view).navigate(action);
+//            }
+//            else{
+//                MainAppFragmentDirections.ActionMainAppFragmentSelf action =MainAppFragmentDirections.actionMainAppFragmentSelf(UserEmail,UserImageURL);
+//                Navigation.findNavController(view).navigate(action);
+//            }
+//
+//        });
+//
+//    }
+//    public void Dislike(){
+//        LikeOrDislike=false;
+//        Model.instance.EditUserLikes(LikeOrDislike,UserEmail,CurrentScreenUserEmail,()->{
+//
+//            MainAppFragmentDirections.ActionMainAppFragmentSelf action =MainAppFragmentDirections.actionMainAppFragmentSelf(UserEmail,UserImageURL);
+//            Navigation.findNavController(view).navigate(action);
+//
+//        });
+//    }
 
 
 
@@ -155,10 +149,10 @@ public class MainAppFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.profile_menu_btn:
-                Navigation.findNavController(view).navigate(MainAppFragmentDirections.actionMainAppFragmentToProfileFragment(UserEmail,UserImageURL));
+                Navigation.findNavController(view).navigate(R.id.action_mainAppFragment_to_profileFragment);
                 break;
             case R.id.messages_menu_btn:
-                Navigation.findNavController(view).navigate(MainAppFragmentDirections.actionMainAppFragmentToMatchesFragment(UserEmail,UserImageURL));
+                Navigation.findNavController(view).navigate(R.id.action_mainAppFragment_to_matchesFragment);
                 break;
             default:
                 return super.onOptionsItemSelected(item);

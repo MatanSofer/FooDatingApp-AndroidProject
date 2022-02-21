@@ -103,7 +103,7 @@
         android:layout_height="41dp"
         android:layout_marginEnd="84dp"
         android:ems="10"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/name_tv3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -128,7 +128,7 @@
         android:layout_height="39dp"
         android:layout_marginEnd="64dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/password_tv2"
         app:layout_constraintEnd_toEndOf="parent" />

@@ -11,9 +11,7 @@ public class Post{
 
 
     public Post(){
-
     }
-
     public Post(String Owner,String FoodName , String Description ){
         this.FoodName=FoodName;
         this.Description=Description;
@@ -24,11 +22,9 @@ public class Post{
     public String getFoodName() {
         return FoodName;
     }
-
     public String getDescription() {
         return Description;
     }
-
     public String getOwner() {
         return Owner;
     }
@@ -60,7 +56,6 @@ public class Post{
         String foodname = (String)json.get("food_name");
         String description = (String)json.get("food_description");
         String owner = (String)json.get("food_owner");
-
         Post post = new Post(owner,foodname,description);
         return post;
     }

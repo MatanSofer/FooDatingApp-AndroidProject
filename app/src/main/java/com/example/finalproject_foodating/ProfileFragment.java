@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.example.finalproject_foodating.model.Model;
+import com.example.finalproject_foodating.model.ModelFireBase;
 import com.example.finalproject_foodating.model.User;
 import com.squareup.picasso.Picasso;
 
@@ -42,18 +43,17 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_profile, container, false);
         setHasOptionsMenu(true);
-        UserEmail = ProfileFragmentArgs.fromBundle(getArguments()).getUserEmail();
-        ImageURL = ProfileFragmentArgs.fromBundle(getArguments()).getUserImageURL();
-        ProfileImage = view.findViewById(R.id.profileFrag_profileImage);
 
+        user= ModelFireBase.getCurrentUserObj();
+
+        ProfileImage = view.findViewById(R.id.profileFrag_profileImage);
         LoadUserImage();
 
         EditBtn = (ImageButton)view.findViewById(R.id.imageButton_editdatails);
         EditBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ProfileFragmentDirections.ActionProfileFragmentToEditDetailsFragment action = ProfileFragmentDirections.actionProfileFragmentToEditDetailsFragment(UserEmail);
-                Navigation.findNavController(view).navigate(action);
+                Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_editDetailsFragment);
             }
         });
 
@@ -61,11 +61,10 @@ public class ProfileFragment extends Fragment {
         SettingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ProfileFragmentDirections.ActionProfileFragmentToSettingsFragment action = ProfileFragmentDirections.actionProfileFragmentToSettingsFragment(UserEmail);
-                Navigation.findNavController(view).navigate(action);
+                Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_settingsFragment);
             }
         });
-        //Log.d("tag",UserEmail);
+
         CameraBtn = (ImageButton) view.findViewById(R.id.profileFrag_cameraBtn);
         CameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +105,7 @@ public class ProfileFragment extends Fragment {
 
     private void LoadUserImage()
     {
-        Model.instance.GetUserByEmail(UserEmail,(user)->{
+        Model.instance.GetUserById((user)->{
             if(!user.getImageURL().equals(""))
             {
                 Picasso.get().load(ImageURL).placeholder(R.drawable.burgerchipsdrinkbackground).into(ProfileImage);
@@ -121,10 +120,10 @@ public class ProfileFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.mainApp_menu_btn:
-                Navigation.findNavController(view).navigate(ProfileFragmentDirections.actionProfileFragmentToMainAppFragment(UserEmail,ImageURL));
+                Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_mainAppFragment);
                 break;
             case R.id.messages_menu_btn:
-                Navigation.findNavController(view).navigate(ProfileFragmentDirections.actionProfileFragmentToMatchesFragment(UserEmail,ImageURL));
+                Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_matchesFragment);
                 break;
             default:
                 return super.onOptionsItemSelected(item);

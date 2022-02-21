@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_mainScreenFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_mainScreenFragment_to_mainAppFragment"
+            app:destination="@id/mainAppFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -25,9 +28,6 @@
         <action
             android:id="@+id/action_registerFragment_to_mainAppFragment"
             app:destination="@id/mainAppFragment" />
-        <action
-            android:id="@+id/action_registerFragment_self"
-            app:destination="@id/registerFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -37,9 +37,6 @@
         <action
             android:id="@+id/action_loginFragment_to_mainAppFragment"
             app:destination="@id/mainAppFragment" />
-        <action
-            android:id="@+id/action_loginFragment_self"
-            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/mainAppFragment"
@@ -52,15 +49,6 @@
         <action
             android:id="@+id/action_mainAppFragment_to_matchesFragment"
             app:destination="@id/matchesFragment" />
-        <argument
-            android:name="userEmail"
-            app:argType="string" />
-        <action
-            android:id="@+id/action_mainAppFragment_self"
-            app:destination="@id/mainAppFragment" />
-        <argument
-            android:name="userImageURL"
-            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -76,18 +64,12 @@
         <action
             android:id="@+id/action_profileFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
-        <argument
-            android:name="userEmail"
-            app:argType="string" />
         <action
             android:id="@+id/action_profileFragment_to_editDetailsFragment2"
             app:destination="@id/editDetailsFragment" />
         <action
             android:id="@+id/action_profileFragment_to_editDetailsFragment"
             app:destination="@id/editDetailsFragment" />
-        <argument
-            android:name="userImageURL"
-            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/matchesFragment"
@@ -103,21 +85,12 @@
         <action
             android:id="@+id/action_matchesFragment_to_messagesFragment"
             app:destination="@id/messagesFragment" />
-        <argument
-            android:name="userEmail"
-            app:argType="string" />
-        <argument
-            android:name="userImageURL"
-            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/editDetailsFragment"
         android:name="com.example.finalproject_foodating.EditDetailsFragment"
         android:label="Edit details "
         tools:layout="@layout/fragment_edit_details">
-        <argument
-            android:name="userEmail"
-            app:argType="string" />
         <action
             android:id="@+id/action_editDetailsFragment_to_editPostFragment"
             app:destination="@id/editPostFragment" />
@@ -130,9 +103,6 @@
         <action
             android:id="@+id/action_settingsFragment_to_mainScreenFragment"
             app:destination="@id/mainScreenFragment" />
-        <argument
-            android:name="userEmail"
-            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/messagesFragment"
