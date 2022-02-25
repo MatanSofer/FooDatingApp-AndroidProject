@@ -2,80 +2,63 @@ package com.example.finalproject_foodating.model;
 
 import android.graphics.Bitmap;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
-import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class Model {
     public static final Model instance = new Model();
     ModelFireBase modelFireBase = new ModelFireBase();
-    MutableLiveData<List<Post>> AllPostsListLD  = new MutableLiveData<List<Post>>();
 
-    private Model(){
-    ReloadPostList();
+
+    private Model() {
+
+
     }
 
 
-
-
-    public interface GetAllUsersListener{
+    public interface GetAllUsersListener {
         void onComplete(List<User> data);
     }
-    public void getAllUsers(GetAllUsersListener listener){
+
+    public void getAllUsers(GetAllUsersListener listener) {
         modelFireBase.getAllUsers(listener);
     }
 
 
-
-    public interface AddUserListener{
+    public interface AddUserListener {
         void onComplete();
     }
-    public void addUser(User user,AddUserListener listener){
-        modelFireBase.addUser(user,listener);
+
+    public void addUser(User user, AddUserListener listener) {
+        modelFireBase.addUser(user, listener);
+
     }
 
 
-    public interface GetUserByIdListener{
+    public interface GetUserByIdListener {
         void onComplete(User user);
     }
-    public void GetUserById( GetUserByIdListener listener){
-        modelFireBase.GetUserById(listener);
+
+    public void GetUserById(String userID,GetUserByIdListener listener) {
+        modelFireBase.GetUserById(userID,listener);
     }
 
 
 
-    public interface GetAllPostsListener{
+
+
+
+
+    public interface GetAllPostsListener {
         void onComplete(List<Post> posts);
     }
-    public void getAllPosts(GetAllPostsListener listener){
-        modelFireBase.getAllPosts(listener);
-    }
+     public void GetAllPosts(GetAllPostsListener listener){
+      modelFireBase.getAllPosts(listener);
+     }
 
 
-    private void ReloadPostList() {
-        modelFireBase.getAllPosts((list)->{
-            AllPostsListLD.setValue(list);
-        });
-    }
 
-    public LiveData<List<Post>> GetAllPosts()
-    {
-        return AllPostsListLD;
-    }
 
-    public interface AddPostListener{
-        void onComplete();
-    }
-    public void addPost(Post post,String FoodId,int Index,AddPostListener listener){
-        modelFireBase.addPost(post,FoodId,()->{
-            ReloadPostList();
-            listener.onComplete();
-        });
-    }
+
 
     public interface GetPostsByIdListener{
         void onComplete(List<Post> posts);
@@ -85,20 +68,31 @@ public class Model {
 
     }
 
-    public interface EditUserListener{
+
+
+
+    public interface AddPostListener {
         void onComplete();
-    }
-    public void EditUser(String UserEmail,String Name,String Password,String Email,EditUserListener listener){
-        modelFireBase.EditUser(UserEmail,Name,Password,Email,listener);
     }
 
-    public interface SetUserImageUrlListener{
+    public void addPost(Post post, String FoodId, AddPostListener listener) {
+        modelFireBase.addPost(post, FoodId,true, () -> {
+            listener.onComplete();
+        });
+    }
+
+
+
+
+    public interface SetUserImageUrlListener {
         void onComplete();
     }
-    public void setUserImageURL(String UserEmail,String UserImageURL,SetUserImageUrlListener listener){
-        modelFireBase.setUserImageURL(UserEmail,UserImageURL,listener);
+
+    public void setUserImageURL(String UserEmail, String UserImageURL, SetUserImageUrlListener listener) {
+        modelFireBase.setUserImageURL(UserEmail, UserImageURL, listener);
     }
-    public interface GetUserImageUrlListener{
+
+    public interface GetUserImageUrlListener {
         void onComplete(String UserURL);
     }
 //    public void GetUserImageURL(String UserEmail,GetUserImageUrlListener listener)
@@ -113,21 +107,29 @@ public class Model {
 //    }
 
 
-    public interface GetPostByFoodIdListener{
+    public interface GetPostByFoodIdListener {
         void onComplete(Post post);
     }
-    public void GetPostByFoodId(String FoodPostId ,GetPostByFoodIdListener listener){
-        modelFireBase.GetPostByFoodId(FoodPostId ,listener);
+
+    public void GetPostByFoodId(String FoodPostId, GetPostByFoodIdListener listener) {
+        modelFireBase.GetPostByFoodId(FoodPostId, listener);
+    }
+    public interface EditUserPostListener{
+        void onComplete();
+    }
+    public void EditUserPost(String FoodId,String FoodName,String Description,Boolean flag,EditUserPostListener listener){
+        modelFireBase.EditUserPost(FoodId,FoodName,Description,flag,listener);
     }
 
-
-    public interface SaveImageListener
-    {
+    public interface SaveImageListener {
         void onComplete(String URL);
     }
-    public void saveImage(String UserEmail,Bitmap bitmap,SaveImageListener listener) {
-        modelFireBase.saveImage(UserEmail,bitmap,listener);
+
+    public void saveImage(String UserEmail, Bitmap bitmap, SaveImageListener listener) {
+        modelFireBase.saveImage(UserEmail, bitmap, listener);
     }
+
+
 
 
 }

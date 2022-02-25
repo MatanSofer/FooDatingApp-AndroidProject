@@ -73,6 +73,8 @@ public class LoginFragment extends Fragment {
                         Toast.makeText(getActivity(),"Login Successfull",Toast.LENGTH_LONG).show();
                             progressBar.setVisibility(ViewGroup.VISIBLE);
                             loginBtn.setEnabled(false);
+                            EmailEt.setEnabled(false);
+                            Password.setEnabled(false);
                             Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_mainAppFragment);
                     }
                     else{

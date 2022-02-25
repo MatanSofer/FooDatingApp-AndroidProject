@@ -82,7 +82,7 @@
     </fragment>
     <fragment
         android:id="@+id/editDetailsFragment"
-        android:name="com.example.finalproject_foodating.EditDetailsFragment"
+        android:name="com.example.finalproject_foodating.AddPostFragment"
         android:label="Edit details"
         tools:layout="@layout/fragment_edit_details" />
     <fragment

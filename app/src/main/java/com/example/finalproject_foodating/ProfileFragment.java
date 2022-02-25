@@ -28,11 +28,8 @@ import com.squareup.picasso.Picasso;
 
 
 public class ProfileFragment extends Fragment {
-    static final int REQUEST_IMAGE_CAPTURE =1;
     ImageButton EditBtn,SettingsBtn, CameraBtn;
     ImageView ProfileImage;
-    String UserEmail;
-    String ImageURL;
     View view;
     Bitmap bitmap;
     User user;
@@ -46,8 +43,10 @@ public class ProfileFragment extends Fragment {
 
         user= ModelFireBase.getCurrentUserObj();
 
+
+
         ProfileImage = view.findViewById(R.id.profileFrag_profileImage);
-        LoadUserImage();
+        //LoadUserImage();
 
         EditBtn = (ImageButton)view.findViewById(R.id.imageButton_editdatails);
         EditBtn.setOnClickListener(new View.OnClickListener() {
@@ -65,37 +64,37 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        CameraBtn = (ImageButton) view.findViewById(R.id.profileFrag_cameraBtn);
-        CameraBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent,REQUEST_IMAGE_CAPTURE);
-
-            }
-        });
+//        CameraBtn = (ImageButton) view.findViewById(R.id.profileFrag_cameraBtn);
+//        CameraBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(intent,REQUEST_IMAGE_CAPTURE);
+//
+//            }
+//        });
 
 
         return view;
 
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
-        {
-            Bundle bundle = data.getExtras();
-            bitmap = (Bitmap) bundle.get("data");
-            ProfileImage.setImageBitmap(bitmap);
-            Model.instance.saveImage(UserEmail,bitmap,(URL)->{
-            Model.instance.setUserImageURL(UserEmail,URL,()->{
-                this.ImageURL = URL;
-            });
-
-            });
-        }
-    }
+//
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
+//        {
+//            Bundle bundle = data.getExtras();
+//            bitmap = (Bitmap) bundle.get("data");
+//            ProfileImage.setImageBitmap(bitmap);
+//            Model.instance.saveImage(UserEmail,bitmap,(URL)->{
+//            Model.instance.setUserImageURL(UserEmail,URL,()->{
+//                this.ImageURL = URL;
+//            });
+//
+//            });
+//        }
+//    }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -103,16 +102,16 @@ public class ProfileFragment extends Fragment {
         inflater.inflate(R.menu.main_app_menu,menu);
     }
 
-    private void LoadUserImage()
-    {
-        Model.instance.GetUserById((user)->{
-            if(!user.getImageURL().equals(""))
-            {
-                Picasso.get().load(ImageURL).placeholder(R.drawable.burgerchipsdrinkbackground).into(ProfileImage);
-            }
-        });
-
-    }
+//    private void LoadUserImage()
+//    {
+//        Model.instance.GetUserById((user)->{
+//            if(!user.getImageURL().equals(""))
+//            {
+//                Picasso.get().load(ImageURL).placeholder(R.drawable.burgerchipsdrinkbackground).into(ProfileImage);
+//            }
+//        });
+//
+//    }
 
 
 

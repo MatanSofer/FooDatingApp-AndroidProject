@@ -74,7 +74,7 @@
     <fragment
         android:id="@+id/matchesFragment"
         android:name="com.example.finalproject_foodating.MatchesFragment"
-        android:label="Matches  Messages"
+        android:label="Matches "
         tools:layout="@layout/fragment_matches">
         <action
             android:id="@+id/action_matchesFragment_to_profileFragment"
@@ -88,9 +88,9 @@
     </fragment>
     <fragment
         android:id="@+id/editDetailsFragment"
-        android:name="com.example.finalproject_foodating.EditDetailsFragment"
+        android:name="com.example.finalproject_foodating.AddPostFragment"
         android:label="Edit details "
-        tools:layout="@layout/fragment_edit_details">
+        tools:layout="@layout/fragment_add_post">
         <action
             android:id="@+id/action_editDetailsFragment_to_editPostFragment"
             app:destination="@id/editPostFragment" />
@@ -107,13 +107,13 @@
     <fragment
         android:id="@+id/messagesFragment"
         android:name="com.example.finalproject_foodating.MessagesFragment"
-        android:label="fragment_messages"
+        android:label="Messages"
         tools:layout="@layout/fragment_messages" />
     <fragment
         android:id="@+id/editPostFragment"
         android:name="com.example.finalproject_foodating.EditPostFragment"
-        android:label="fragment_edit_post"
-        tools:layout="@layout/fragment_edit_post" >
+        android:label="Edit Post"
+        tools:layout="@layout/fragment_edit_post">
         <argument
             android:name="foodId"
             app:argType="string" />

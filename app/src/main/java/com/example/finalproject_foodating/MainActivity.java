@@ -15,19 +15,21 @@ import android.view.ViewGroup;
 
 import com.example.finalproject_foodating.model.Model;
 import com.example.finalproject_foodating.model.ModelFireBase;
+import com.example.finalproject_foodating.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
     NavController navController;
-    //private FirebaseAuth mAuth;
+   // static String userId=ModelFireBase.getCurrentUser();
+ //   static User userObj=ModelFireBase.getCurrentUserObj();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        //check if there is user that is already logged in from the device
         if(ModelFireBase.getCurrentUser() != null){
             NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.MainActivity_fragmentContainerView);
             navController = navHostFragment.getNavController();
@@ -55,4 +57,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
+    //public static String getuserId(){return userId;}
+    //public static User getuserObj(){return userObj;}
 }

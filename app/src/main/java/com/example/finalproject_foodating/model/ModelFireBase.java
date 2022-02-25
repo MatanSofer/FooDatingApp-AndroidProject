@@ -3,17 +3,13 @@ package com.example.finalproject_foodating.model;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.Navigation;
 
-import com.example.finalproject_foodating.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -26,10 +22,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class ModelFireBase {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -48,8 +42,8 @@ public static String getCurrentUser(){
     if(currentFirebaseUser!=null){
        current = FirebaseAuth.getInstance().getCurrentUser().getUid() ;}
     else{current=null;}
-    if(current==null){Log.d("currenINGET","null");}
-    else{Log.d("currenINGET",current);}
+    //if(current==null){Log.d("currenINGET","null");}
+    //else{Log.d("currenINGET",current);}
 
    return current;
 }
@@ -57,7 +51,7 @@ public static FirebaseAuth getAuthUser(){
     return mAuth;
 }
     public static User getCurrentUserObj(){
-        Model.instance.GetUserById((user)->{
+        Model.instance.GetUserById(current,(user)->{
                user1=user;
         });
         return user1;
@@ -74,9 +68,8 @@ public static FirebaseAuth getAuthUser(){
 
                         User u = User.fromJson(doc.getData());
                         if (u != null) {
-                            Log.d("add","user");
                             UsersList.add(u); //add from document each user
-                            Log.d("email",u.getEmail());
+
                         }
                     }
                 }else{
@@ -107,10 +100,8 @@ public static FirebaseAuth getAuthUser(){
 
     }
 
-    public void GetUserById( Model.GetUserByIdListener listener) {
-        DocumentReference docRef = db.collection("user").document(ModelFireBase.getCurrentUser());
-        Log.d("email", ModelFireBase.getCurrentUser());
-
+    public void GetUserById(String UserId, Model.GetUserByIdListener listener) {
+        DocumentReference docRef = db.collection("user").document(UserId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -140,18 +131,7 @@ public static FirebaseAuth getAuthUser(){
         });
     }
 
-    public void EditUser(String UserEmail,String Name,String Password,String Email,Model.EditUserListener listener){
-        DocumentReference EditUser = db.collection("user").document(UserEmail);
-        EditUser.update("email", Email);
-        EditUser.update("name", Name);
-        EditUser.update("password", Password)
-                .addOnSuccessListener((successListener)-> {
-                    listener.onComplete();
-                })
-                .addOnFailureListener((e)-> {
-                    Log.d("TAG", e.getMessage());
-                });
-    }
+
 //    public void EditUserLikes(Boolean LikeOrDislike, String UserEmail,String LikeOrDislikeUser, Model.EditUserLikesListener listener){
 //        DocumentReference EditUserLikes = db.collection("user").document(UserEmail);
 //
@@ -187,7 +167,7 @@ public static FirebaseAuth getAuthUser(){
 //////////////////////////////////////////////////////////////////////////////
 
 
-    public void addPost(Post NewPost,String FoodId, Model.AddPostListener listener) {
+    public void addPost(Post NewPost,String FoodId,Boolean bool, Model.AddPostListener listener) {
 // Add a new document with a generated ID
         db.collection("posts")
                 .document(FoodId).set(NewPost.toJson())
@@ -199,8 +179,9 @@ public static FirebaseAuth getAuthUser(){
                 });
 
     }
-    public void getAllPosts(Model.GetAllPostsListener listener) {
-        db.collection("posts").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void getAllPosts( Model.GetAllPostsListener listener) {
+        db.collection("posts")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 LinkedList<Post> postsList = new LinkedList<>(); //might be error
@@ -209,6 +190,36 @@ public static FirebaseAuth getAuthUser(){
                         Post p = Post.fromJson(doc.getData());
                         if (p != null) {
                             postsList.add(p); //add from document each user
+                        }
+                    }
+                }else{
+
+                }
+                listener.onComplete(postsList);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onComplete(null);
+            }
+        });
+    }
+    public void GetPostsById(String UserId, Model.GetPostsByIdListener listener) {
+        db.collection("posts").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                LinkedList<Post> postsList = new LinkedList<>(); //might be error
+                if(task.isSuccessful()){
+                    for (QueryDocumentSnapshot doc: task.getResult()){
+                        Post p = Post.fromJson(doc.getData());
+                        if (p != null && p.getOwner().equals(UserId)&&p.getFlag()==true) {
+                            postsList.add(p); //add from document each user
+                        }
+                        else if(p.flag==true && UserId.equals("all")){
+                            postsList.add(p);
+                        }
+                        else{
+                            continue;
                         }
                     }
                 }else{
@@ -244,33 +255,26 @@ public static FirebaseAuth getAuthUser(){
             }
         });
     }
-    public void GetPostsById(String UserId, Model.GetPostsByIdListener listener) {
-        db.collection("posts").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                LinkedList<Post> postsList = new LinkedList<>(); //might be error
-                if(task.isSuccessful()){
-                    for (QueryDocumentSnapshot doc: task.getResult()){
-                        Post p = Post.fromJson(doc.getData());
-                        if (p != null && p.getOwner().equals(UserId)) {
-                            postsList.add(p); //add from document each user
-                        }
-                        else{
-                            continue;
-                        }
-                    }
-                }else{
 
-                }
-                listener.onComplete(postsList);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                listener.onComplete(null);
-            }
-        });
+    public void EditUserPost(String FoodId,String FoodName,String Description,Boolean flag,Model.EditUserPostListener listener){
+        DocumentReference EditPost = db.collection("posts").document(FoodId);
+        EditPost.update("food_description", Description);
+        EditPost.update("food_name", FoodName);
+        EditPost.update("deletedPost", flag)
+                .addOnSuccessListener((successListener)-> {
+                    listener.onComplete();
+                })
+                .addOnFailureListener((e)-> {
+                    Log.d("TAG", e.getMessage());
+                });
+
     }
+
+
+
+
+
+
 
     public void saveImage(String UserEmail,Bitmap bitmap, Model.SaveImageListener listener) {
         FirebaseStorage storage = FirebaseStorage.getInstance();

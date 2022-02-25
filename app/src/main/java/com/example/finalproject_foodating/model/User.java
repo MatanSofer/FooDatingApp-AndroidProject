@@ -1,15 +1,19 @@
 package com.example.finalproject_foodating.model;
 
+
+
 import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 
 public class User {
 
@@ -18,6 +22,12 @@ public class User {
     public String Gender ="";
     public String ImageURL ="";
     public String UserId;
+    final static String nameJ ="name";
+    final static String emailJ ="email";
+    final static String genderJ ="gender";
+    final static String userDislikeJ ="user_dislike";
+    final static String userLikeJ ="user_likes";
+    final static String ImageUrlJ ="imageURL";
     FirebaseUser currentFirebaseUser;
     List<String> TheUserLikes = new ArrayList<>();
     List<String> TheUserDisLikes = new ArrayList<>();
@@ -74,22 +84,22 @@ public class User {
     public Map<String,Object> toJson(){
         // Create a new user with different fields
         Map<String, Object> json = new HashMap<>();
-        json.put("name",getName());
-        json.put("email",getEmail());
-        json.put("gender",getGender());
-        json.put("user_dislike",getUserDisLikes());
-        json.put("user_likes",getUserLikes());
-        json.put("imageURL",getImageURL());
+        json.put(nameJ,getName());
+        json.put(emailJ,getEmail());
+        json.put(genderJ,getGender());
+        json.put(userDislikeJ,getUserDisLikes());
+        json.put(userLikeJ,getUserLikes());
+        json.put(ImageUrlJ,getImageURL());
         return json;
     }
 
     static User fromJson(Map<String,Object> json ){
-        String email1 = (String)json.get("email");
-        String name1 = (String)json.get("name");
-        String gender1 = (String)json.get("gender");
-        String imageURL = (String) json.get("imageURL");
-        List<String> TheUserLikes = (List<String>)json.get("user_likes");
-        List<String> TheUserDisLikes = (List<String>)json.get("user_dislike");
+        String email1 = (String)json.get(emailJ);
+        String name1 = (String)json.get(nameJ);
+        String gender1 = (String)json.get(genderJ);
+        String imageURL = (String) json.get(ImageUrlJ);
+        List<String> TheUserLikes = (List<String>)json.get(userLikeJ);
+        List<String> TheUserDisLikes = (List<String>)json.get(userDislikeJ);
 
         User user = new User(name1,email1,gender1,TheUserLikes,TheUserDisLikes);
         user.setImageURL(imageURL);

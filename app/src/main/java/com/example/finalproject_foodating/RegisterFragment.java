@@ -76,10 +76,16 @@ public class RegisterFragment extends Fragment {
                             Toast.makeText(getActivity(),"Registered successfully!",Toast.LENGTH_LONG).show();
                             progressBar.setVisibility(ViewGroup.VISIBLE);
                             RegisterBtn.setEnabled(false);
+                            NameEt.setEnabled(false);
+                            EmailEt.setEnabled(false);
+                            Password.setEnabled(false);
+                            MaleGenderBtn.setEnabled(false);
+                            FemaleGenderBtn.setEnabled(false);
                             User user = new User(UserName,UserEmail,UserGender);
 
                             Model.instance.addUser(user,()->{
                                 Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_mainAppFragment);
+
                             });
                         }
                         else{

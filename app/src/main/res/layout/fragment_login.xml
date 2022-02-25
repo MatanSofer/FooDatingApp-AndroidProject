@@ -14,22 +14,23 @@
         android:id="@+id/email_tv3"
         android:layout_width="0dp"
         android:layout_height="46dp"
+        android:layout_marginTop="12dp"
         android:fontFamily="casual"
         android:text="Password :"
-        android:textSize="30sp"
+        android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/email_tv2"
         app:layout_constraintTop_toBottomOf="@+id/email_tv2" />
 
     <TextView
         android:id="@+id/email_tv2"
-        android:layout_width="118dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="40dp"
+        android:layout_width="98dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="76dp"
         android:fontFamily="casual"
         android:text="Email :"
-        android:textSize="30sp"
+        android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/email_log_et"
         app:layout_constraintHorizontal_bias="0.0"
@@ -38,9 +39,11 @@
 
     <EditText
         android:id="@+id/email_log_et"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="217dp"
+        android:layout_height="43dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="4dp"
+        android:drawableStart="@drawable/ic_email"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="@+id/email_tv2"
@@ -49,9 +52,11 @@
 
     <EditText
         android:id="@+id/password_log_et"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
+        android:layout_width="212dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="4dp"
+        android:drawableStart="@drawable/ic_lock"
         android:ems="10"
         android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="@+id/email_tv3"
@@ -59,34 +64,21 @@
 
     <Button
         android:id="@+id/loginscreen_btn"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        app:cornerRadius="20dp"
+        app:strokeColor="#abdbe3"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginBottom="28dp"
         android:text="Login"
         android:textAllCaps="false"
         android:textColor="@color/white"
+        app:backgroundTint="#089ca4"
         android:textStyle="bold"
-        app:backgroundTint="@color/teal_700"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/forget_password_btn"
-        android:layout_width="143dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="20dp"
-        android:fontFamily="casual"
-        android:text="forget password?"
-        android:textSize="8sp"
-        android:textStyle="bold"
-        app:backgroundTint="@color/teal_700"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.344"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email_tv3" />
 
     <ProgressBar
         android:id="@+id/login_progressBar"
