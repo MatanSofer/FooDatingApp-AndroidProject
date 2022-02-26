@@ -34,7 +34,6 @@ public class MainAppFragment extends Fragment {
     Boolean LikeOrDislike;
     ImageButton LikeBtn,DislikeBtn;
     TextView forcheck;
-    //User n1;
     List<User> UsersList ;
     List<String> AllEmailList; //to recognize users
     List<String> AllUsersLikes ; //to recognize users
@@ -48,8 +47,7 @@ public class MainAppFragment extends Fragment {
          view = inflater.inflate(R.layout.fragment_main_app, container, false);
          setHasOptionsMenu(true);
 
-        //UserEmail = MainAppFragmentArgs.fromBundle(getArguments()).getUserEmail();
-         //UserImageURL =MainAppFragmentArgs.fromBundle(getArguments()).getUserImageURL();
+
         forcheck = view.findViewById(R.id.useremailcheck);
 
         //getAllusers();

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -41,14 +43,17 @@ public class AddPostFragment extends Fragment {
     String foodId;
     View view;
     MyAdapter adapter;
-    SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView list;
-    List<Post> posts = new LinkedList<Post>();
-    //EditDetailsFragmentViewModel viewModel;
-    //SwipeRefreshLayout swipeRefresh;
+    AddPostFragmentViewModel viewModel;
+    SwipeRefreshLayout swipeRefresh;
 
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        viewModel = new ViewModelProvider(this).get(AddPostFragmentViewModel.class);
 
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,7 +63,7 @@ public class AddPostFragment extends Fragment {
         //user= ModelFireBase.getCurrentUserObj();
         progressBar = view.findViewById(R.id.edit_progressBar);
         progressBar.setVisibility(ViewGroup.GONE);
-
+        Model.instance.reloadPosts();
 
         FoodName = view.findViewById(R.id.NewFoodName_et);
         Description = view.findViewById(R.id.NewDescription_et);
@@ -74,11 +79,12 @@ public class AddPostFragment extends Fragment {
         //get all the posts the user owns
         list = view.findViewById(R.id.post_edit_rv);
         list.setHasFixedSize(true);
-        list.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        list.setLayoutManager(linearLayoutManager);
         adapter = new MyAdapter();
         list.setAdapter(adapter);
-        //DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(list.getContext(), linearLayoutManager.getOrientation());
-//        list.addItemDecoration(dividerItemDecoration);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(list.getContext(), linearLayoutManager.getOrientation());
+       list.addItemDecoration(dividerItemDecoration);
 
 
         adapter.setOnItemClickListener(new OnItemClickListener() {
@@ -87,37 +93,46 @@ public class AddPostFragment extends Fragment {
                 progressBar.setVisibility(ViewGroup.VISIBLE);
                 FoodName.setEnabled(false);
                 Description.setEnabled(false);
-                Post p = posts.get(position);
+                Post p = viewModel.getData().getValue().get(position);
                 foodId = p.getFoodName()+p.getOwner();
                 AddPostFragmentDirections.ActionEditDetailsFragmentToEditPostFragment action = AddPostFragmentDirections.actionEditDetailsFragmentToEditPostFragment(foodId);
                 Navigation.findNavController(v).navigate(action);
             }
         });
 
-//        swipeRefresh = view.findViewById(R.id.studentlist_swipe_refresh);
-//        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                refreshData();
-//            }
-//        });
+        swipeRefresh = view.findViewById(R.id.EditFrag_Refresh);
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshData();
+            }
+        });
         // setHasOptionsMenu(true);
-        refreshData();
+        if(viewModel.getData().getValue()==null){refreshData();}
+
+        viewModel.getData().observe(getViewLifecycleOwner(),(Postlist)-> {
+            adapter.notifyDataSetChanged();
+        });
+
         return view;
     }
 
     //ot right function just to check
     private void refreshData() {
-        Model.instance.GetPostsById(ModelFireBase.getCurrentUser(),new Model.GetPostsByIdListener() {
-            @Override
-            public void onComplete(List<Post> p) {
-                posts = p;
-                adapter.notifyDataSetChanged();
+      //  swipeRefresh.setRefreshing(true);
+
+
+
+//        Model.instance.GetPostsById(ModelFireBase.getCurrentUser(),new Model.GetPostsByIdListener() {
+//            @Override
+//            public void onComplete(List<Post> p) {
+//                viewModel.setData(p);
+//                adapter.notifyDataSetChanged();
 //                if (swipeRefresh.isRefreshing()) {
 //                    swipeRefresh.setRefreshing(false);
 //                }
-            }
-        });
+//            }
+//        });
     }
     //    @Override
 //    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -163,14 +178,17 @@ public class AddPostFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-            Post post = posts.get(position);
+            Post post = viewModel.getData().getValue().get(position);
             holder.FoodName.setText(post.FoodName);
             holder.FoodDescription.setText(post.getDescription());
             //holder.Profile.setChecked(post.isFlag());
         }
         @Override
         public int getItemCount() {
-            return posts.size();
+            if(viewModel.getData().getValue()==null){
+                return 0;
+            }
+            return viewModel.getData().getValue().size();
         }
     }
 

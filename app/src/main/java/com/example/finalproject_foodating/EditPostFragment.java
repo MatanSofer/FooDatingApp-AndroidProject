@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.finalproject_foodating.model.AppLocalDB;
 import com.example.finalproject_foodating.model.Model;
 import com.example.finalproject_foodating.model.ModelFireBase;
 import com.example.finalproject_foodating.model.Post;
@@ -42,18 +43,19 @@ public class EditPostFragment extends Fragment {
         progressBar = view.findViewById(R.id.editpost_progressBar);
         progressBar.setVisibility(ViewGroup.GONE);
 
+
+
         Model.instance.GetUserById(ModelFireBase.getCurrentUser(),(user)->{
             UserName=user.getName();
+            Model.instance.GetPostByFoodId(FoodPostId,(post)->{
+                foodNameEt.setText(post.getFoodName());
+                descriptionEt.setText(post.getDescription());
+                ownerEt.setText(UserName);
+                Owner = post.getOwner();
+
+            });
         });
 
-
-       Model.instance.GetPostByFoodId(FoodPostId,(post)->{
-           foodNameEt.setText(post.getFoodName());
-           descriptionEt.setText(post.getDescription());
-           ownerEt.setText(UserName);
-           Owner = post.getOwner();
-
-       });
 
 
 
@@ -89,12 +91,14 @@ public class EditPostFragment extends Fragment {
         String newFood_description = descriptionEt.getText().toString();
         String newFood_name = foodNameEt.getText().toString();
         Model.instance.EditUserPost(FoodPostId,newFood_name,newFood_description,true,()->{
+           // Model.instance.reloadPosts();
             Navigation.findNavController(view).navigate(R.id.action_editPostFragment_to_editDetailsFragment);
         });
     }
 
     public void deletePost(){
-        Model.instance.EditUserPost(FoodPostId,descriptionEt.getText().toString(),foodNameEt.getText().toString(),false,()->{
+        Model.instance.EditUserPost(FoodPostId,foodNameEt.getText().toString(),descriptionEt.getText().toString(),false,()->{
+           // Model.instance.reloadPosts();
             Navigation.findNavController(view).navigate(R.id.action_editPostFragment_to_editDetailsFragment);
         });
     }

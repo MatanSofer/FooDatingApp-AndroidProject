@@ -21,8 +21,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
     NavController navController;
-   // static String userId=ModelFireBase.getCurrentUser();
- //   static User userObj=ModelFireBase.getCurrentUserObj();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +55,5 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
-    //public static String getuserId(){return userId;}
-    //public static User getuserObj(){return userObj;}
+
 }

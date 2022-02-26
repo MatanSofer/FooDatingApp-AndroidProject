@@ -22,6 +22,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.sql.Time;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -204,20 +205,25 @@ public static FirebaseAuth getAuthUser(){
             }
         });
     }
-    public void GetPostsById(String UserId, Model.GetPostsByIdListener listener) {
-        db.collection("posts").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void GetPostsById(Long since , String UserId, Model.GetPostsByIdListener listener) {
+        db.collection("posts")
+                .whereGreaterThanOrEqualTo(Post.lastUpdate1,new Timestamp(since,0))
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 LinkedList<Post> postsList = new LinkedList<>(); //might be error
                 if(task.isSuccessful()){
                     for (QueryDocumentSnapshot doc: task.getResult()){
                         Post p = Post.fromJson(doc.getData());
-                        if (p != null && p.getOwner().equals(UserId)&&p.getFlag()==true) {
+                       // String str;
+                        if (p != null && p.getOwner().equals(UserId))//&&p.getFlag()==true) {
+                        {
                             postsList.add(p); //add from document each user
                         }
-                        else if(p.flag==true && UserId.equals("all")){
+                        else if( UserId.equals("all")){   //p.flag==true &&
                             postsList.add(p);
                         }
+
                         else{
                             continue;
                         }
@@ -255,13 +261,16 @@ public static FirebaseAuth getAuthUser(){
             }
         });
     }
-
+    String str;
     public void EditUserPost(String FoodId,String FoodName,String Description,Boolean flag,Model.EditUserPostListener listener){
         DocumentReference EditPost = db.collection("posts").document(FoodId);
         EditPost.update("food_description", Description);
         EditPost.update("food_name", FoodName);
         EditPost.update("deletedPost", flag)
                 .addOnSuccessListener((successListener)-> {
+            str =new Boolean (flag).toString();
+            Log.d("Edituserbool",str);
+            //Model.instance.reloadPosts();
                     listener.onComplete();
                 })
                 .addOnFailureListener((e)-> {

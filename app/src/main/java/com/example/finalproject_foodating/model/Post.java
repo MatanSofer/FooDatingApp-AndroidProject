@@ -1,4 +1,6 @@
 package com.example.finalproject_foodating.model;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.ColorSpace;
 
 import androidx.annotation.NonNull;
@@ -6,37 +8,37 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.example.finalproject_foodating.MyApplication;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
 
 import java.util.HashMap;
 import java.util.Map;
+
 @Entity
 public class Post{
 
     final static String foodName ="food_name";
     final static String foodDescription ="food_description";
     final static String foodOwner ="food_owner";
-    final static String lastUpdate1 = "lastupdate";
+    public final static String lastUpdate1 = "lastupdate";
     final static String deletedPost="deletedPost";
     public boolean flag;
-    public String Owner ="";
+    @PrimaryKey
+    @NonNull
     public String FoodName="";
+    public String Owner ="";
     public String Description="";
     Long lastUpdate=new Long(0);
 
-    public Long getLastUpdate() {
-        return lastUpdate;
-    }
 
-    public void setLastUpdate(Long lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
+
+
 
 
     //public String photo="";
 
-    @Ignore
+
     public Post(String Owner,String FoodName , String Description,boolean flag ){
         this.FoodName=FoodName;
         this.Description=Description;
@@ -57,6 +59,10 @@ public class Post{
         return Owner;
     }
     public boolean getFlag(){return flag;}
+    public Long getLastUpdate() {
+        return lastUpdate;
+    }
+
 
     public void setFlag(Boolean bool){this.flag=bool;}
     public void setFoodName(String FoodName) {
@@ -68,7 +74,9 @@ public class Post{
     public void setOwner(String Owner) {
         this.Owner=Owner;
     }
-
+    public void setLastUpdate(Long lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
 
     public Map<String,Object> toJson(){
         // Create a new user with different fields
@@ -77,7 +85,7 @@ public class Post{
         json.put(foodDescription,getDescription());
         json.put(foodOwner,getOwner());
         json.put(deletedPost,getFlag());
-        //json.put(lastUpdate1, FieldValue.serverTimestamp());
+        json.put(lastUpdate1, FieldValue.serverTimestamp());
         //json.put("photo",);
         return json;
 
@@ -90,11 +98,22 @@ public class Post{
         Boolean flag = (Boolean)json.get(deletedPost);
         Post post = new Post(owner,foodname,description,flag);
 
-       // Timestamp ts = (Timestamp)json.get(lastUpdate1);
-       // post.setLastUpdate(new Long(ts.getSeconds()));
+        Timestamp ts = (Timestamp)json.get(lastUpdate1);
+        post.setLastUpdate(new Long(ts.getSeconds()));
 
         return post;
     }
+    static Long getLocalLastUpdated(){
+        Long localLastUpdate = MyApplication.getContext().getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                .getLong(lastUpdate1,0);
+        return localLastUpdate;
+    }
 
+    static void setLocalLastUpdated(Long date){
+        SharedPreferences.Editor editor = MyApplication.getContext()
+                .getSharedPreferences("TAG", Context.MODE_PRIVATE).edit();
+        editor.putLong(lastUpdate1,date);
+        editor.commit();
+    }
 
 }

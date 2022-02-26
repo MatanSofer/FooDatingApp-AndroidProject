@@ -1,6 +1,14 @@
 package com.example.finalproject_foodating.model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.util.Log;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
+import com.example.finalproject_foodating.MyApplication;
 
 import java.util.List;
 
@@ -10,18 +18,18 @@ public class Model {
 
 
     private Model() {
-
-
+        reloadPosts();
     }
 
 
     public interface GetAllUsersListener {
         void onComplete(List<User> data);
     }
-
     public void getAllUsers(GetAllUsersListener listener) {
         modelFireBase.getAllUsers(listener);
     }
+
+
 
 
     public interface AddUserListener {
@@ -46,8 +54,6 @@ public class Model {
 
 
 
-
-
     public interface GetAllPostsListener {
         void onComplete(List<Post> posts);
     }
@@ -63,9 +69,55 @@ public class Model {
     public interface GetPostsByIdListener{
         void onComplete(List<Post> posts);
     }
-    public void GetPostsById(String UserId,GetPostsByIdListener listener){
-        modelFireBase.GetPostsById(UserId ,listener);
+    public void GetPostsById(Long l,String UserId,GetPostsByIdListener listener){
+        modelFireBase.GetPostsById(l,UserId ,listener);
 
+    }
+
+
+    MutableLiveData<List<Post>> postListLD = new MutableLiveData<List<Post>>();
+
+    public void reloadPosts(){
+
+        Long localLastUpdate = Post.getLocalLastUpdated();
+;        modelFireBase.GetPostsById(localLastUpdate,ModelFireBase.getCurrentUser(),(list)->{
+            MyApplication.executorService.execute(()->{
+                String str;
+            Long lLastUpdate = new Long(0);
+            for(Post p:list){
+                if(p.getFlag()==false){
+                    AppLocalDB.db.postDao().delete(p);
+                    str =new Boolean (p.getFlag()).toString();
+                    Log.d("model false",str+p.getFoodName() );
+                }
+                else{
+                    AppLocalDB.db.postDao().insertAll(p);
+                    Log.d("model true","t" );
+                }
+                if(p.getLastUpdate() > lLastUpdate){
+                    lLastUpdate = p.getLastUpdate()
+;                }
+            }
+            Post.setLocalLastUpdated(lLastUpdate);
+
+                 List<Post> postList = AppLocalDB.db.postDao().getUserPosts(ModelFireBase.getCurrentUser());
+                 postListLD.postValue(postList);
+             });
+
+
+        });
+
+
+
+
+//        modelFireBase.GetPostsById(ModelFireBase.getCurrentUser() ,(list)->{
+//            postListLD.setValue(list);
+//        });
+    }
+
+
+    public LiveData<List<Post>> getAllUserPosts(){
+        return postListLD;
     }
 
 
@@ -77,6 +129,18 @@ public class Model {
 
     public void addPost(Post post, String FoodId, AddPostListener listener) {
         modelFireBase.addPost(post, FoodId,true, () -> {
+            reloadPosts();
+            listener.onComplete();
+        });
+    }
+
+
+    public interface EditUserPostListener{
+        void onComplete();
+    }
+    public void EditUserPost(String FoodId,String FoodName,String Description,Boolean flag,EditUserPostListener listener){
+        modelFireBase.EditUserPost(FoodId,FoodName,Description,flag,()->{
+            reloadPosts();
             listener.onComplete();
         });
     }
@@ -114,12 +178,7 @@ public class Model {
     public void GetPostByFoodId(String FoodPostId, GetPostByFoodIdListener listener) {
         modelFireBase.GetPostByFoodId(FoodPostId, listener);
     }
-    public interface EditUserPostListener{
-        void onComplete();
-    }
-    public void EditUserPost(String FoodId,String FoodName,String Description,Boolean flag,EditUserPostListener listener){
-        modelFireBase.EditUserPost(FoodId,FoodName,Description,flag,listener);
-    }
+
 
     public interface SaveImageListener {
         void onComplete(String URL);
