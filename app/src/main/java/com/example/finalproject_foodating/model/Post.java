@@ -23,12 +23,14 @@ public class Post{
     final static String foodOwner ="food_owner";
     public final static String lastUpdate1 = "lastupdate";
     final static String deletedPost="deletedPost";
+    final static String ImageUrlJ ="imageURL";
     public boolean flag;
     @PrimaryKey
     @NonNull
     public String FoodName="";
     public String Owner ="";
     public String Description="";
+    public String ImageURL ="";
     Long lastUpdate=new Long(0);
 
 
@@ -62,8 +64,11 @@ public class Post{
     public Long getLastUpdate() {
         return lastUpdate;
     }
+    public String getImageURL(){ return this.ImageURL;}
 
-
+    public void setImageURL(String imageURL) {
+        this.ImageURL = imageURL;
+    }
     public void setFlag(Boolean bool){this.flag=bool;}
     public void setFoodName(String FoodName) {
         this.FoodName=FoodName;
@@ -86,6 +91,7 @@ public class Post{
         json.put(foodOwner,getOwner());
         json.put(deletedPost,getFlag());
         json.put(lastUpdate1, FieldValue.serverTimestamp());
+        json.put(ImageUrlJ,getImageURL());
         //json.put("photo",);
         return json;
 
@@ -96,11 +102,12 @@ public class Post{
         String description = (String)json.get(foodDescription);
         String owner = (String)json.get(foodOwner);
         Boolean flag = (Boolean)json.get(deletedPost);
+        String imageURL = (String) json.get(ImageUrlJ);
         Post post = new Post(owner,foodname,description,flag);
 
         Timestamp ts = (Timestamp)json.get(lastUpdate1);
         post.setLastUpdate(new Long(ts.getSeconds()));
-
+        post.setImageURL(imageURL);
         return post;
     }
     static Long getLocalLastUpdated(){

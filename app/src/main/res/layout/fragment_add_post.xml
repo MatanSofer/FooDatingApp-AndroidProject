@@ -11,15 +11,14 @@
 
     <Button
         android:id="@+id/save_post_btn"
-        android:layout_width="64dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="72dp"
+        android:layout_width="89dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="68dp"
         android:text="save"
         android:textSize="7sp"
         android:textStyle="bold"
         app:backgroundTint="@color/teal_700"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_tv4" />
 
@@ -124,6 +123,7 @@
             android:id="@+id/post_edit_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scrollbars="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -131,5 +131,33 @@
             app:layout_constraintVertical_bias="1.0" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <ImageView
+        android:id="@+id/post_imageview"
+        android:layout_width="127dp"
+        android:layout_height="46dp"
+        android:layout_marginBottom="12dp"
+        android:src="@drawable/burgerchipsdrinkbackground"
+        app:layout_constraintBottom_toTopOf="@+id/save_post_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Food Photo "
+        app:layout_constraintBottom_toTopOf="@+id/post_imageview"
+        app:layout_constraintEnd_toEndOf="@+id/post_imageview"
+        app:layout_constraintStart_toStartOf="@+id/post_imageview"
+        app:layout_constraintTop_toBottomOf="@+id/password_tv4" />
+
+    <ImageButton
+        android:id="@+id/post_camera_btn"
+        android:layout_width="27dp"
+        android:layout_height="20dp"
+        android:src="@android:drawable/ic_menu_camera"
+        app:layout_constraintStart_toStartOf="@+id/post_imageview"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

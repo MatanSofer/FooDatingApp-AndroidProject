@@ -1,6 +1,10 @@
 package com.example.finalproject_foodating;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,12 +19,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +36,7 @@ import com.example.finalproject_foodating.model.Model;
 import com.example.finalproject_foodating.model.ModelFireBase;
 import com.example.finalproject_foodating.model.Post;
 import com.example.finalproject_foodating.model.User;
+import com.squareup.picasso.Picasso;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -43,10 +51,14 @@ public class AddPostFragment extends Fragment {
     String foodId;
     View view;
     MyAdapter adapter;
+    SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView list;
     AddPostFragmentViewModel viewModel;
     SwipeRefreshLayout swipeRefresh;
-
+    ImageView postPhoto;
+    Bitmap bitmap;
+    ImageButton cameraBtn;
+    static final Integer REQUEST_IMAGE_CAPTURE =  1;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -65,6 +77,7 @@ public class AddPostFragment extends Fragment {
         progressBar.setVisibility(ViewGroup.GONE);
         Model.instance.reloadPosts();
 
+        postPhoto= view.findViewById(R.id.post_imageview);
         FoodName = view.findViewById(R.id.NewFoodName_et);
         Description = view.findViewById(R.id.NewDescription_et);
         SavePostBtn = view.findViewById(R.id.save_post_btn);
@@ -72,6 +85,7 @@ public class AddPostFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 SavePostDetails();
+                Model.instance.reloadPosts();
             }
         });
 
@@ -114,9 +128,23 @@ public class AddPostFragment extends Fragment {
             adapter.notifyDataSetChanged();
         });
 
+
+        cameraBtn = view.findViewById(R.id.post_camera_btn);
+        cameraBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent,REQUEST_IMAGE_CAPTURE);
+        });
+
         return view;
     }
-
+    public void onActivityResult(int requestCode,int resultCode ,@NonNull Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+            Bundle bundle=data.getExtras();
+             bitmap = (Bitmap) bundle.get("data");
+            postPhoto.setImageBitmap(bitmap);
+        }
+    }
     //ot right function just to check
     private void refreshData() {
       //  swipeRefresh.setRefreshing(true);
@@ -142,13 +170,13 @@ public class AddPostFragment extends Fragment {
     class MyViewHolder extends RecyclerView.ViewHolder{
         TextView FoodName;
         TextView FoodDescription;
-        //CheckBox Profile;
+        ImageView postImg;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             FoodName = itemView.findViewById(R.id.post_food_name);
             FoodDescription = itemView.findViewById(R.id.post_food_description);
-            //Profile = itemView.findViewById(R.id.post_cb);
+            postImg = itemView.findViewById(R.id.post_food_photo);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -158,6 +186,17 @@ public class AddPostFragment extends Fragment {
                     }
                 }
             });
+        }
+        public void bind(Post post){
+            FoodName.setText(post.FoodName);
+            FoodDescription.setText(post.getDescription());
+            String url = post.getImageURL();
+            if(!url.equals("")){
+                Picasso.get()
+                        .load(url)
+                        .placeholder(R.drawable.burgerchipsdrinkbackground)
+                        .into(postImg);
+            }
         }
     }
     interface OnItemClickListener{
@@ -177,11 +216,9 @@ public class AddPostFragment extends Fragment {
         }
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-
             Post post = viewModel.getData().getValue().get(position);
-            holder.FoodName.setText(post.FoodName);
-            holder.FoodDescription.setText(post.getDescription());
-            //holder.Profile.setChecked(post.isFlag());
+            holder.bind(post);
+
         }
         @Override
         public int getItemCount() {
@@ -196,10 +233,21 @@ public class AddPostFragment extends Fragment {
         DescriptionStr = Description.getText().toString();
         FoodNameStr = FoodName.getText().toString();
         foodId = FoodNameStr + ModelFireBase.getCurrentUser();
-
         Post post = new Post(ModelFireBase.getCurrentUser(), FoodNameStr, DescriptionStr, true);
+
+        if(bitmap!=null){
+            Model.instance.saveImage(foodId, bitmap, (URL) -> {
+                post.setImageURL(URL);
+                Model.instance.setPostImageURL(foodId, URL, () -> {
+                    //this.ImageURL = URL;
+                });
+
+            });
+        }
+
+
         Model.instance.addPost(post, foodId, () -> {
-            Toast.makeText(getActivity(),"Your post has been added successfully!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Your post has been added successfully!", Toast.LENGTH_SHORT).show();
         });
 
 

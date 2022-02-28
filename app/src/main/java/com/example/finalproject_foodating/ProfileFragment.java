@@ -107,7 +107,9 @@ public class ProfileFragment extends Fragment {
 //        Model.instance.GetUserById((user)->{
 //            if(!user.getImageURL().equals(""))
 //            {
-//                Picasso.get().load(ImageURL).placeholder(R.drawable.burgerchipsdrinkbackground).into(ProfileImage);
+//                Picasso.get().load(ImageURL).
+//                placeholder(R.drawable.burgerchipsdrinkbackground).
+//                into(ProfileImage);
 //            }
 //        });
 //

@@ -19,7 +19,10 @@ public class AddPostFragmentViewModel extends ViewModel {
     public LiveData<List<Post>> getData() {
         return posts;
     }
-
+    public LiveData<List<Post>> getAllData() {
+        posts=Model.instance.getAllPosts();
+        return posts;
+    }
     public void setData(LiveData<List<Post>> p) {
         this.posts=p;
     }

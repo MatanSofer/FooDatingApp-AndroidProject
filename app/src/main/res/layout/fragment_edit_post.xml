@@ -8,13 +8,13 @@
 
     <TextView
         android:id="@+id/owner_tv"
-        android:layout_width="113dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="100dp"
+        android:layout_width="118dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="104dp"
         android:fontFamily="casual"
         android:text="Owner :"
-        android:textSize="30sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -71,13 +71,14 @@
     <EditText
 
         android:id="@+id/owner_editpost_et"
-        android:layout_width="0dp"
-        android:layout_height="63dp"
-        android:layout_marginEnd="35dp"
+        android:layout_width="170dp"
+        android:layout_height="43dp"
+        android:layout_marginEnd="52dp"
         android:ems="10"
         app:layout_constraintBottom_toBottomOf="@+id/owner_tv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/owner_tv" />
+        app:layout_constraintTop_toTopOf="@+id/owner_tv"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/save_edit_post_btn"
@@ -124,5 +125,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.385" />
+
+    <ImageView
+        android:id="@+id/editpost_imageview"
+        android:layout_width="126dp"
+        android:layout_height="68dp"
+        android:src="@drawable/burgerchipsdrinkbackground"
+        app:layout_constraintBottom_toTopOf="@+id/editpost_progressBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/owner_editpost_et" />
+
+    <ImageButton
+        android:id="@+id/editpost_camera_btn"
+        android:layout_width="27dp"
+        android:layout_height="20dp"
+        android:src="@android:drawable/ic_menu_camera"
+        app:layout_constraintStart_toStartOf="@+id/editpost_imageview"
+        app:layout_constraintTop_toTopOf="@+id/editpost_imageview" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

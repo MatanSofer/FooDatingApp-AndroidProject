@@ -25,11 +25,10 @@ public class Model {
     public interface GetAllUsersListener {
         void onComplete(List<User> data);
     }
+
     public void getAllUsers(GetAllUsersListener listener) {
         modelFireBase.getAllUsers(listener);
     }
-
-
 
 
     public interface AddUserListener {
@@ -57,8 +56,8 @@ public class Model {
     public interface GetAllPostsListener {
         void onComplete(List<Post> posts);
     }
-     public void GetAllPosts(GetAllPostsListener listener){
-      modelFireBase.getAllPosts(listener);
+     public void GetAllPosts(Long l ,GetAllPostsListener listener){
+      modelFireBase.getAllPosts(l,listener);
      }
 
 
@@ -76,7 +75,7 @@ public class Model {
 
 
     MutableLiveData<List<Post>> postListLD = new MutableLiveData<List<Post>>();
-
+    MutableLiveData<List<Post>> postListLD1 = new MutableLiveData<List<Post>>();
     public void reloadPosts(){
 
         Long localLastUpdate = Post.getLocalLastUpdated();
@@ -103,11 +102,32 @@ public class Model {
                  List<Post> postList = AppLocalDB.db.postDao().getUserPosts(ModelFireBase.getCurrentUser());
                  postListLD.postValue(postList);
              });
-
-
         });
 
+            modelFireBase.getAllPosts(localLastUpdate,(list)->{
+            MyApplication.executorService.execute(()->{
+                String str;
+                Long lLastUpdate = new Long(0);
+                for(Post p:list){
+                    if(p.getFlag()==false){
+                        AppLocalDB.db.postDao().delete(p);
+                        str =new Boolean (p.getFlag()).toString();
+                        Log.d("model false",str+p.getFoodName() );
+                    }
+                    else{
+                        AppLocalDB.db.postDao().insertAll(p);
+                        Log.d("model true","t" );
+                    }
+                    if(p.getLastUpdate() > lLastUpdate){
+                        lLastUpdate = p.getLastUpdate()
+                        ;                }
+                }
+                Post.setLocalLastUpdated(lLastUpdate);
 
+                List<Post> postList = AppLocalDB.db.postDao().getAll();
+                postListLD1.postValue(postList);
+            });
+        });
 
 
 //        modelFireBase.GetPostsById(ModelFireBase.getCurrentUser() ,(list)->{
@@ -119,7 +139,9 @@ public class Model {
     public LiveData<List<Post>> getAllUserPosts(){
         return postListLD;
     }
-
+    public LiveData<List<Post>> getAllPosts(){
+        return postListLD1;
+    }
 
 
 
@@ -140,20 +162,33 @@ public class Model {
     }
     public void EditUserPost(String FoodId,String FoodName,String Description,Boolean flag,EditUserPostListener listener){
         modelFireBase.EditUserPost(FoodId,FoodName,Description,flag,()->{
-            reloadPosts();
+           //reloadPosts();
             listener.onComplete();
         });
     }
+    public interface GetPostByFoodIdListener {
+        void onComplete(Post post);
+    }
+
+    public void GetPostByFoodId(String FoodPostId, GetPostByFoodIdListener listener) {
+        modelFireBase.GetPostByFoodId(FoodPostId, listener);
+    }
 
 
 
 
-    public interface SetUserImageUrlListener {
+
+
+
+    public interface SetPostImageUrlListener {
         void onComplete();
     }
 
-    public void setUserImageURL(String UserEmail, String UserImageURL, SetUserImageUrlListener listener) {
-        modelFireBase.setUserImageURL(UserEmail, UserImageURL, listener);
+    public void setPostImageURL(String FoodId, String UserImageURL, SetPostImageUrlListener listener) {
+        modelFireBase.setPostImageURL(FoodId, UserImageURL,()->{
+            reloadPosts();
+            listener.onComplete();
+        });
     }
 
     public interface GetUserImageUrlListener {
@@ -171,21 +206,14 @@ public class Model {
 //    }
 
 
-    public interface GetPostByFoodIdListener {
-        void onComplete(Post post);
-    }
 
-    public void GetPostByFoodId(String FoodPostId, GetPostByFoodIdListener listener) {
-        modelFireBase.GetPostByFoodId(FoodPostId, listener);
-    }
 
 
     public interface SaveImageListener {
         void onComplete(String URL);
     }
-
-    public void saveImage(String UserEmail, Bitmap bitmap, SaveImageListener listener) {
-        modelFireBase.saveImage(UserEmail, bitmap, listener);
+    public void saveImage(String Id, Bitmap bitmap, SaveImageListener listener) {
+        modelFireBase.saveFoodImage(Id, bitmap, listener);
     }
 
 

@@ -124,13 +124,6 @@ public static FirebaseAuth getAuthUser(){
 
 
 
-    public void setUserImageURL(String UserEmail, String UserImageURL, Model.SetUserImageUrlListener listener)
-    {
-        DocumentReference EditUser = db.collection("user").document(UserEmail);
-        EditUser.update("imageURL",UserImageURL).addOnSuccessListener((successListener)->{
-            listener.onComplete();
-        });
-    }
 
 
 //    public void EditUserLikes(Boolean LikeOrDislike, String UserEmail,String LikeOrDislikeUser, Model.EditUserLikesListener listener){
@@ -180,8 +173,9 @@ public static FirebaseAuth getAuthUser(){
                 });
 
     }
-    public void getAllPosts( Model.GetAllPostsListener listener) {
+    public void getAllPosts(Long since, Model.GetAllPostsListener listener) {
         db.collection("posts")
+                .whereGreaterThanOrEqualTo(Post.lastUpdate1,new Timestamp(since,0))
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -218,11 +212,12 @@ public static FirebaseAuth getAuthUser(){
                        // String str;
                         if (p != null && p.getOwner().equals(UserId))//&&p.getFlag()==true) {
                         {
+
                             postsList.add(p); //add from document each user
                         }
-                        else if( UserId.equals("all")){   //p.flag==true &&
-                            postsList.add(p);
-                        }
+//                        else if( UserId.equals("all")){   //p.flag==true &&
+//                            postsList.add(p);
+//                        }
 
                         else{
                             continue;
@@ -285,11 +280,11 @@ public static FirebaseAuth getAuthUser(){
 
 
 
-    public void saveImage(String UserEmail,Bitmap bitmap, Model.SaveImageListener listener) {
+    public void saveFoodImage(String FoodId,Bitmap bitmap, Model.SaveImageListener listener) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
 
         StorageReference storageRef = storage.getReference();
-        StorageReference imageRef = storageRef.child(""+UserEmail);
+        StorageReference imageRef = storageRef.child(""+FoodId);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
@@ -304,6 +299,26 @@ public static FirebaseAuth getAuthUser(){
         }));
 
     }
+    public void setPostImageURL(String FoodId, String UserImageURL, Model.SetPostImageUrlListener listener)
+    {
+        DocumentReference EditUser = db.collection("posts").document(FoodId);
+        EditUser.update("imageURL",UserImageURL).addOnSuccessListener((successListener)->{
+            listener.onComplete();
+        });
+    }
+
+
+
+
+
+//    public void setPostImageURL(String UserId, String UserImageURL, Model.SetUserImageUrlListener listener)
+//    {
+//        DocumentReference EditUser = db.collection("user").document(UserId);
+//        EditUser.update("imageURL",UserImageURL).addOnSuccessListener((successListener)->{
+//            listener.onComplete();
+//        });
+//    }
+
 }
 
 
