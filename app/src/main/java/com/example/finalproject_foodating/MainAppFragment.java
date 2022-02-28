@@ -53,11 +53,13 @@ public class MainAppFragment extends Fragment {
     RecyclerView list;
     AddPostFragmentViewModel viewModel;
     SwipeRefreshLayout swipeRefresh;
+    TextView ownerName , foodName, ownerName1 , foodName1;
+    ImageView postImage;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         viewModel = new ViewModelProvider(this).get(AddPostFragmentViewModel.class);
-
     }
 
     @Override
@@ -66,9 +68,27 @@ public class MainAppFragment extends Fragment {
 
          view = inflater.inflate(R.layout.fragment_main_app, container, false);
          setHasOptionsMenu(true);
+
         progressBar = view.findViewById(R.id.MainApp_progressBar);
         progressBar.setVisibility(ViewGroup.GONE);
         Model.instance.reloadPosts();
+
+
+        postImage= (ImageView)view.findViewById(R.id.MainAppFoodImage);
+        ownerName = (TextView)view.findViewById(R.id.OwnerNameTV);
+        ownerName1 = (TextView)view.findViewById(R.id.Owner);
+        foodName = (TextView)view.findViewById(R.id.foodnameTV);
+        foodName1 = (TextView)view.findViewById(R.id.FoodName);
+        postImage.setImageResource(R.drawable.burgerchipsdrinkbackground);
+
+
+        postImage.setVisibility(View.INVISIBLE);
+        ownerName.setVisibility(View.INVISIBLE);
+        ownerName1.setVisibility(View.INVISIBLE);
+        foodName.setVisibility(View.INVISIBLE);
+        foodName1.setVisibility(View.INVISIBLE);
+
+
 
         list = view.findViewById(R.id.MainApp_rv);
         list.setHasFixedSize(true);
@@ -82,9 +102,28 @@ public class MainAppFragment extends Fragment {
         adapter.setOnItemClickListener(new MainAppFragment.OnItemClickListener() {
             @Override //click on item and what will heppenj
             public void onItemClick(int position, View v) {
-                progressBar.setVisibility(ViewGroup.VISIBLE);
+                //progressBar.setVisibility(ViewGroup.VISIBLE);
                 Post p = viewModel.getAllData().getValue().get(position);
-                Navigation.findNavController(view).navigate(R.id.action_mainAppFragment_to_matchesFragment);
+                String FoodName = p.getFoodName();
+                String OwnerId = p.getOwner();
+                String ImageUrl = p.getImageURL();
+                Model.instance.GetUserById(OwnerId,(user)->{
+                    ownerName.setText(user.getName());
+                    foodName.setText(FoodName);
+                    if(!ImageUrl.equals("")){
+                        Picasso.get()
+                                .load(ImageUrl)
+                                .placeholder(R.drawable.burgerchipsdrinkbackground)
+                                .into(postImage);
+                    }
+
+                    postImage.setVisibility(View.VISIBLE);
+                    ownerName.setVisibility(View.VISIBLE);
+                    ownerName1.setVisibility(View.VISIBLE);
+                    foodName.setVisibility(View.VISIBLE);
+                    foodName1.setVisibility(View.VISIBLE);
+                });
+                //Navigation.findNavController(view).navigate(R.id.action_mainAppFragment_to_matchesFragment);
             }
         });
 
@@ -119,7 +158,7 @@ public class MainAppFragment extends Fragment {
 
 
 
-//        forcheck = view.findViewById(R.id.useremailcheck);
+
 //
 //        getAllusers();
 //

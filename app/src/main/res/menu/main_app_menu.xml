@@ -4,12 +4,12 @@
 
     <item
         android:id="@+id/profile_menu_btn"
-        android:icon="@drawable/profileicon"
+        android:icon="@drawable/profileiconblack"
         android:title="Profile"
         app:showAsAction="always" />
     <item
         android:id="@+id/mainApp_menu_btn"
-        android:icon="@drawable/pizzaicon1"
+        android:icon="@drawable/pizzablackicon"
         android:title="MainAppScreenBtn"
         app:showAsAction="always" />
     <item
