@@ -80,7 +80,7 @@ public class MainAppFragment extends Fragment {
         list.addItemDecoration(dividerItemDecoration);
 
         adapter.setOnItemClickListener(new MainAppFragment.OnItemClickListener() {
-            @Override //click on item and what will heppen
+            @Override //click on item and what will heppenj
             public void onItemClick(int position, View v) {
                 progressBar.setVisibility(ViewGroup.VISIBLE);
                 Post p = viewModel.getAllData().getValue().get(position);
