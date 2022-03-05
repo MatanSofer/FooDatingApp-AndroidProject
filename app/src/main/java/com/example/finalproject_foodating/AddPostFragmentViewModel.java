@@ -10,20 +10,24 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class AddPostFragmentViewModel extends ViewModel {
-   LiveData<List<Post>> posts = Model.instance.getAllUserPosts();
-
-//    public AddPostFragmentViewModel(){
-//        data=Model
-//    }
+    LiveData<List<Post>> posts = Model.instance.getAllUserPosts();
+    LiveData<List<Post>> allposts = Model.instance.getAllPosts();
 
     public LiveData<List<Post>> getData() {
         return posts;
     }
+
     public LiveData<List<Post>> getAllData() {
-        posts=Model.instance.getAllPosts();
-        return posts;
+        return allposts;
     }
-    public void setData(LiveData<List<Post>> p) {
-        this.posts=p;
+
+
+    public void setUserPostData(LiveData<List<Post>> p) {
+        this.posts = p;
     }
+
+    public void setAllUsersPostsData(LiveData<List<Post>> p) {
+        this.allposts = p;
+    }
+
 }

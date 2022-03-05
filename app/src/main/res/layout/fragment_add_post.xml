@@ -6,21 +6,25 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/foobackgroundnew"
+        android:background="@drawable/logregbtn"
         tools:context=".AddPostFragment">
 
     <Button
         android:id="@+id/save_post_btn"
         android:layout_width="89dp"
         android:layout_height="30dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="4dp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        app:cornerRadius="20dp"
+        app:strokeColor="#3271bf"
+        android:textColor="#3271bf"
+        android:textStyle="bold"
         android:text="save"
         android:textSize="7sp"
-        android:textStyle="bold"
-        app:backgroundTint="@color/teal_700"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_tv4" />
+        app:layout_constraintTop_toBottomOf="@+id/post_imageview" />
 
     <EditText
         android:id="@+id/NewDescription_et"
@@ -65,9 +69,10 @@
         android:layout_width="0dp"
         android:layout_height="19dp"
         android:layout_marginTop="24dp"
-        android:fontFamily="sans-serif-medium"
         android:gravity="center"
         android:text="Your Posts :"
+        android:fontFamily="@font/nunito"
+        android:textColor="#2271bf"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -79,6 +84,8 @@
         android:layout_height="19dp"
         android:layout_marginTop="40dp"
         android:text="Add New Post :"
+        android:fontFamily="@font/nunito"
+        android:textColor="#2271bf"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -135,17 +142,19 @@
         android:id="@+id/post_imageview"
         android:layout_width="127dp"
         android:layout_height="46dp"
-        android:layout_marginBottom="12dp"
-        android:src="@drawable/burgerchipsdrinkbackground"
-        app:layout_constraintBottom_toTopOf="@+id/save_post_btn"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/logocropped"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Food Photo "
+        android:fontFamily="@font/nunito"
+        android:textColor="#2271bf"
         app:layout_constraintBottom_toTopOf="@+id/post_imageview"
         app:layout_constraintEnd_toEndOf="@+id/post_imageview"
         app:layout_constraintStart_toStartOf="@+id/post_imageview"

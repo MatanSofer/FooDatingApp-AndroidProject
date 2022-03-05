@@ -1,7 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/foobackgroundnew"
-    tools:context=".MatchesFragment"/>
+    android:background="@drawable/logregbtn"
+    tools:context=".MatchesFragment"
+    >
+
+    <TextView
+        android:id="@+id/emailmatchesDetails"
+        android:textColor="#0f3675"
+        android:layout_width="257dp"
+        android:layout_height="406dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="16dp"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toEndOf="@+id/namematchesDetails" />
+
+    <TextView
+        android:id="@+id/namematchesDetails"
+        android:textColor="#0f3675"
+        android:layout_width="120dp"
+        android:layout_height="410dp"
+        android:layout_marginStart="15dp"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/emailmatchesDetails"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/emailmatchesDetails" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="79dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/textview_background"
+        android:fontFamily="@font/nunito"
+        android:gravity="center"
+        android:text="Name"
+        android:textColor="#0f3675"
+        android:textSize="17sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toTopOf="@+id/namematchesDetails"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="87dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/textview_background"
+        android:fontFamily="@font/nunito"
+        android:gravity="center"
+        android:text="Email"
+        android:textColor="#0f3675"
+        android:textSize="17sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toTopOf="@+id/emailmatchesDetails"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.153"
+        app:layout_constraintStart_toEndOf="@+id/textView8"
+        app:layout_constraintTop_toTopOf="@+id/textView8"
+        app:layout_constraintVertical_bias="0.625" />
+
+    <ImageView
+        android:id="@+id/lastmatchphoto"
+        android:layout_width="90dp"
+        android:layout_height="68dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView11"
+        app:layout_constraintVertical_bias="0.066"
+        tools:src="@drawable/logocropped" />
+
+    <TextView
+        android:id="@+id/lastmatchname"
+        android:textColor="#0f3675"
+        android:layout_width="142dp"
+        android:layout_height="22dp"
+        app:layout_constraintStart_toEndOf="@+id/lastmatchphoto"
+        app:layout_constraintTop_toTopOf="@+id/lastmatchphoto" />
+
+    <TextView
+        android:id="@+id/lastmatchemail"
+        android:textColor="#0f3675"
+        android:layout_width="143dp"
+        android:layout_height="23dp"
+        app:layout_constraintBottom_toBottomOf="@+id/lastmatchphoto"
+        app:layout_constraintStart_toStartOf="@+id/lastmatchname" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:textColor="#0f3675"
+        android:layout_width="169dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="30dp"
+        android:text="Your Last Match Was With "
+        android:fontFamily="@font/satisfy"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:textColor="#0f3675"
+        android:layout_width="188dp"
+        android:layout_height="25dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/satisfy"
+        android:text="All of your matches history "
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.538"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

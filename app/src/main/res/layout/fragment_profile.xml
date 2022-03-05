@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="ProfileFragment"
-    android:background="@drawable/foobackgroundnew">
+    android:background="@drawable/logregbtn">
 
     <ImageButton
-        android:id="@+id/imageButton_settings"
-        android:layout_width="39dp"
-        android:layout_height="43dp"
+        android:id="@+id/imageButton_logout"
+        android:layout_width="50dp"
+        android:layout_height="45dp"
         android:layout_marginEnd="50dp"
-        android:src="@drawable/settingspic"
+        android:src="@drawable/logoutnew"
         app:layout_constraintBottom_toBottomOf="@+id/imageButton_editdatails"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageButton_editdatails"
@@ -20,13 +20,13 @@
 
     <ImageButton
         android:id="@+id/imageButton_editdatails"
-        android:layout_width="38dp"
-        android:layout_height="43dp"
+        android:layout_width="49dp"
+        android:layout_height="48dp"
         android:layout_marginStart="50dp"
         android:layout_marginBottom="32dp"
-        android:src="@drawable/editpic"
+        android:src="@drawable/newedit"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton_settings"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton_logout"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="SpeakableTextPresentCheck" />
 
@@ -37,32 +37,36 @@
         android:text="Edit Posts"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:textColor="#0f3675"
         app:layout_constraintBottom_toTopOf="@+id/imageButton_editdatails"
         app:layout_constraintEnd_toEndOf="@+id/imageButton_editdatails"
+        app:layout_constraintHorizontal_bias="0.515"
         app:layout_constraintStart_toStartOf="@+id/imageButton_editdatails"
-        app:layout_constraintTop_toTopOf="@+id/textView4" />
+        app:layout_constraintTop_toTopOf="@+id/textView4"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Settings"
+        android:text="Log Out"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton_settings"
-        app:layout_constraintEnd_toEndOf="@+id/imageButton_settings"
-        app:layout_constraintStart_toStartOf="@+id/imageButton_settings" />
+        android:textColor="#0f3675"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton_logout"
+        app:layout_constraintEnd_toEndOf="@+id/imageButton_logout"
+        app:layout_constraintStart_toStartOf="@+id/imageButton_logout" />
 
     <ImageView
         android:id="@+id/profileFrag_profileImage"
-        android:layout_width="0dp"
-        android:layout_height="261dp"
-        android:layout_marginStart="74dp"
-        android:layout_marginTop="76dp"
-        android:layout_marginEnd="74dp"
-        android:src="@drawable/burgerchipsdrinkbackground"
+        android:layout_width="400dp"
+        android:layout_height="301dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/logocropped"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.545"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

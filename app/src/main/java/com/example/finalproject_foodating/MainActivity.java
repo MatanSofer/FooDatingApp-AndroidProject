@@ -28,18 +28,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //check if there is user that is already logged in from the device
-        if(ModelFireBase.getCurrentUser() != null){
+        if (ModelFireBase.getCurrentUser() != null) {
             NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.MainActivity_fragmentContainerView);
             navController = navHostFragment.getNavController();
-            NavigationUI.setupActionBarWithNavController(this,navController);
+            NavigationUI.setupActionBarWithNavController(this, navController);
             navController.navigate(R.id.mainAppFragment);
-        }
-        else{
+        } else {
             NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.MainActivity_fragmentContainerView);
             navController = navHostFragment.getNavController();
-            NavigationUI.setupActionBarWithNavController(this,navController);
+            NavigationUI.setupActionBarWithNavController(this, navController);
         }
-
 
 
     }

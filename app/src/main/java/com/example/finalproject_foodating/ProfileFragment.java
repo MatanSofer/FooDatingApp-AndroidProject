@@ -2,6 +2,8 @@ package com.example.finalproject_foodating;
 
 import static android.app.Activity.RESULT_OK;
 
+import static com.example.finalproject_foodating.AddPostFragment.REQUEST_IMAGE_CAPTURE;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -23,17 +25,18 @@ import android.widget.ImageView;
 
 import com.example.finalproject_foodating.model.Model;
 import com.example.finalproject_foodating.model.ModelFireBase;
-import com.example.finalproject_foodating.model.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 
 public class ProfileFragment extends Fragment {
-    ImageButton EditBtn,SettingsBtn, CameraBtn;
+    ImageButton EditBtn, LogoutBtn, CameraBtn;
     ImageView ProfileImage;
     View view;
     Bitmap bitmap;
-    User user;
-
+    String ImageURL;
+    private FirebaseAuth mAuth;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,85 +44,83 @@ public class ProfileFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_profile, container, false);
         setHasOptionsMenu(true);
 
-        user= ModelFireBase.getCurrentUserObj();
-
-
 
         ProfileImage = view.findViewById(R.id.profileFrag_profileImage);
-        //LoadUserImage();
+        LoadUserImage();
 
-        EditBtn = (ImageButton)view.findViewById(R.id.imageButton_editdatails);
+        EditBtn = (ImageButton) view.findViewById(R.id.imageButton_editdatails);
         EditBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_editDetailsFragment);
             }
         });
-
-        SettingsBtn = (ImageButton)view.findViewById(R.id.imageButton_settings);
-        SettingsBtn.setOnClickListener(new View.OnClickListener() {
+        LogoutBtn = (ImageButton) view.findViewById(R.id.imageButton_logout);
+        mAuth = FirebaseAuth.getInstance();
+        LogoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_settingsFragment);
+                logout();
+            }
+        });
+        CameraBtn = (ImageButton) view.findViewById(R.id.profileFrag_cameraBtn);
+        CameraBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+
+            }
+        });
+        return view;
+    }
+
+    private void LoadUserImage() {
+        Model.instance.GetUserById(ModelFireBase.getCurrentUser(), (user) -> {
+            if (!user.getImageURL().equals("")) {
+                Picasso.get().load(user.getImageURL()).
+                        placeholder(R.drawable.logocropped).
+                        into(ProfileImage);
             }
         });
 
-//        CameraBtn = (ImageButton) view.findViewById(R.id.profileFrag_cameraBtn);
-//        CameraBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                startActivityForResult(intent,REQUEST_IMAGE_CAPTURE);
-//
-//            }
-//        });
-
-
-        return view;
-
     }
-//
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
-//        {
-//            Bundle bundle = data.getExtras();
-//            bitmap = (Bitmap) bundle.get("data");
-//            ProfileImage.setImageBitmap(bitmap);
-//            Model.instance.saveImage(UserEmail,bitmap,(URL)->{
-//            Model.instance.setUserImageURL(UserEmail,URL,()->{
-//                this.ImageURL = URL;
-//            });
-//
-//            });
-//        }
-//    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle bundle = data.getExtras();
+            bitmap = (Bitmap) bundle.get("data");
+            ProfileImage.setImageBitmap(bitmap);
+            Model.instance.saveUserImage(ModelFireBase.getCurrentUser(), bitmap, (URL) -> {
+                Model.instance.setUserImageURL(ModelFireBase.getCurrentUser(), URL, () -> {
+                    this.ImageURL = URL;
+                });
+
+            });
+        }
+    }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.main_app_menu,menu);
+        inflater.inflate(R.menu.main_app_menu, menu);
     }
 
-//    private void LoadUserImage()
-//    {
-//        Model.instance.GetUserById((user)->{
-//            if(!user.getImageURL().equals(""))
-//            {
-//                Picasso.get().load(ImageURL).
-//                placeholder(R.drawable.burgerchipsdrinkbackground).
-//                into(ProfileImage);
-//            }
-//        });
-//
-//    }
+    public void logout() {
+        FirebaseAuth.getInstance().signOut();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_mainScreenFragment);
+        }
 
 
-
+    }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.mainApp_menu_btn:
                 Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_mainAppFragment);
                 break;

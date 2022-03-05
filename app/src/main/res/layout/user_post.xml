@@ -32,8 +32,8 @@
 
     <TextView
         android:id="@+id/post_food_description"
-        android:layout_width="310dp"
-        android:layout_height="39dp"
+        android:layout_width="309dp"
+        android:layout_height="30dp"
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/post_food_photo"
         app:layout_constraintStart_toEndOf="@+id/post_food_photo"

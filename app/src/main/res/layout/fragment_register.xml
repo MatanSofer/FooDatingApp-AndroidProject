@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backgroundopenscreennew"
+    android:background="@drawable/backgroundopenscreennew1"
     tools:context=".RegisterFragment">
 
 
@@ -12,8 +12,8 @@
         android:id="@+id/name_tv2"
         android:layout_width="113dp"
         android:layout_height="42dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="casual"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/latoblack"
         android:text="Gender :"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -22,16 +22,18 @@
 
     <EditText
         android:id="@+id/email_reg_et"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="210dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="20dp"
-        android:ems="10"
         android:drawableStart="@drawable/ic_email"
+        android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="@+id/email_tv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/email_tv" />
+        app:layout_constraintHorizontal_bias="0.114"
+        app:layout_constraintStart_toEndOf="@+id/email_tv"
+        app:layout_constraintTop_toBottomOf="@+id/name_reg_et" />
 
     <TextView
         android:id="@+id/name_tv"
@@ -39,7 +41,7 @@
         android:layout_height="46dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="40dp"
-        android:fontFamily="casual"
+        android:fontFamily="@font/latoblack"
         android:text="Name :"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -50,8 +52,8 @@
         android:id="@+id/password_tv"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="casual"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/latoblack"
         android:text="Password:"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -63,8 +65,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="casual"
+        android:layout_marginTop="14dp"
+        android:fontFamily="@font/latoblack"
         android:text="Email :"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -87,8 +89,8 @@
 
     <EditText
         android:id="@+id/password_reg"
-        android:layout_width="163dp"
-        android:layout_height="57dp"
+        android:layout_width="166dp"
+        android:layout_height="42dp"
         android:layout_marginStart="2dp"
         android:layout_marginEnd="4dp"
         android:drawableStart="@drawable/ic_lock"
@@ -110,7 +112,6 @@
         android:text="Register"
         android:textStyle="bold"
         android:textColor="@color/white"
-        app:backgroundTint="#089ca4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -143,7 +144,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/name_tv2"
         app:layout_constraintTop_toBottomOf="@+id/password_reg"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintVertical_bias="0.526" />
 
     <ProgressBar
         android:id="@+id/register_progressBar"

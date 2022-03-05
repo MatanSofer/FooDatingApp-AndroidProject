@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.finalproject_foodating.model.Model;
+import com.example.finalproject_foodating.model.ModelFireBase;
 import com.example.finalproject_foodating.model.Post;
 import com.example.finalproject_foodating.model.User;
 import com.squareup.picasso.Picasso;
@@ -38,23 +40,17 @@ import java.util.List;
 
 
 public class MainAppFragment extends Fragment {
-    View view;
+    TextView ownerName , foodName, ownerName1 , foodName1;
+    String FoodName,OwnerId,ImageUrl,postOwnerName,LikeOrDislike;
     ProgressBar progressBar;
-    String UserEmail,CurrentScreenUserEmail,UserImageURL;
-    User CurrentScreenUser;
-    Boolean LikeOrDislike;
     ImageButton LikeBtn,DislikeBtn;
-    TextView forcheck;
-    List<User> UsersList ;
-    List<String> AllEmailList; //to recognize users
-    List<String> AllUsersLikes ; //to recognize users
-    List<String> AllUserDislikes; //to recognize users
+    Button moveMatch;
     MyAdapter adapter;
     RecyclerView list;
     AddPostFragmentViewModel viewModel;
     SwipeRefreshLayout swipeRefresh;
-    TextView ownerName , foodName, ownerName1 , foodName1;
     ImageView postImage;
+    View view;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -68,25 +64,8 @@ public class MainAppFragment extends Fragment {
 
          view = inflater.inflate(R.layout.fragment_main_app, container, false);
          setHasOptionsMenu(true);
-
-        progressBar = view.findViewById(R.id.MainApp_progressBar);
-        progressBar.setVisibility(ViewGroup.GONE);
-        Model.instance.reloadPosts();
-
-
-        postImage= (ImageView)view.findViewById(R.id.MainAppFoodImage);
-        ownerName = (TextView)view.findViewById(R.id.OwnerNameTV);
-        ownerName1 = (TextView)view.findViewById(R.id.Owner);
-        foodName = (TextView)view.findViewById(R.id.foodnameTV);
-        foodName1 = (TextView)view.findViewById(R.id.FoodName);
-        postImage.setImageResource(R.drawable.burgerchipsdrinkbackground);
-
-
-        postImage.setVisibility(View.INVISIBLE);
-        ownerName.setVisibility(View.INVISIBLE);
-        ownerName1.setVisibility(View.INVISIBLE);
-        foodName.setVisibility(View.INVISIBLE);
-        foodName1.setVisibility(View.INVISIBLE);
+         setFields();
+         Model.instance.reloadPosts();
 
 
 
@@ -94,21 +73,21 @@ public class MainAppFragment extends Fragment {
         list.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         list.setLayoutManager(linearLayoutManager);
-        adapter = new MyAdapter();
+        adapter =new MyAdapter();
         list.setAdapter(adapter);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(list.getContext(), linearLayoutManager.getOrientation());
         list.addItemDecoration(dividerItemDecoration);
 
         adapter.setOnItemClickListener(new MainAppFragment.OnItemClickListener() {
-            @Override //click on item and what will heppenj
+            @Override
             public void onItemClick(int position, View v) {
-                //progressBar.setVisibility(ViewGroup.VISIBLE);
                 Post p = viewModel.getAllData().getValue().get(position);
-                String FoodName = p.getFoodName();
-                String OwnerId = p.getOwner();
-                String ImageUrl = p.getImageURL();
+                 FoodName = p.getFoodName();
+                 OwnerId = p.getOwner();
+                 ImageUrl = p.getImageURL();
                 Model.instance.GetUserById(OwnerId,(user)->{
-                    ownerName.setText(user.getName());
+                    postOwnerName=user.getName();
+                    ownerName.setText(postOwnerName);
                     foodName.setText(FoodName);
                     if(!ImageUrl.equals("")){
                         Picasso.get()
@@ -116,15 +95,18 @@ public class MainAppFragment extends Fragment {
                                 .placeholder(R.drawable.burgerchipsdrinkbackground)
                                 .into(postImage);
                     }
-
-                    postImage.setVisibility(View.VISIBLE);
-                    ownerName.setVisibility(View.VISIBLE);
-                    ownerName1.setVisibility(View.VISIBLE);
-                    foodName.setVisibility(View.VISIBLE);
-                    foodName1.setVisibility(View.VISIBLE);
+                    makeFieldsVisble();
+                    checkTheUser();
                 });
-                //Navigation.findNavController(view).navigate(R.id.action_mainAppFragment_to_matchesFragment);
+
             }
+        });
+
+
+
+        viewModel.getAllData().observe(getViewLifecycleOwner(),(Postlist)-> {
+            Log.d("livedatabeforeadd",String.valueOf(Postlist.size()));
+            adapter.notifyDataSetChanged();
         });
 
         swipeRefresh = view.findViewById(R.id.MainApp_Refresh);
@@ -135,53 +117,168 @@ public class MainAppFragment extends Fragment {
             }
         });
 
-        if(viewModel.getAllData().getValue()==null){refreshData();}
-
-        viewModel.getAllData().observe(getViewLifecycleOwner(),(Postlist)-> {
-            adapter.notifyDataSetChanged();
+        moveMatch=view.findViewById(R.id.movematchesbtn);
+        moveMatch.setVisibility(View.INVISIBLE);
+        moveMatch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.action_mainAppFragment_to_matchesFragment);
+            }
         });
 
 
+        LikeBtn = (ImageButton)view.findViewById(R.id.likebtn);
+        LikeBtn.setVisibility(View.INVISIBLE);
+        LikeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               Like();
+            }
+        });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//        getAllusers();
-//
-//        LikeBtn = (ImageButton)view.findViewById(R.id.likebtn);
-//        LikeBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Like();
-//            }
-//        });
-//
-//        DislikeBtn = (ImageButton)view.findViewById(R.id.dislikebtn);
-//        DislikeBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Dislike();
-//            }
-//        });
+        DislikeBtn = (ImageButton)view.findViewById(R.id.dislikebtn);
+        DislikeBtn.setVisibility(View.INVISIBLE);
+        DislikeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                Dislike();
+            }
+        });
 
          return view;
-
     }
-//    public void getAllusers(){
+
+
+    public void setFields(){
+        progressBar = view.findViewById(R.id.MainApp_progressBar);
+        progressBar.setVisibility(ViewGroup.GONE);
+        Model.instance.reloadPosts();
+        postImage= (ImageView)view.findViewById(R.id.MainAppFoodImage);
+        ownerName = (TextView)view.findViewById(R.id.OwnerNameTV);
+        ownerName1 = (TextView)view.findViewById(R.id.Owner);
+        foodName = (TextView)view.findViewById(R.id.foodnameTV);
+        foodName1 = (TextView)view.findViewById(R.id.FoodName);
+        postImage.setImageResource(R.drawable.burgerchipsdrinkbackground);
+        postImage.setVisibility(View.INVISIBLE);
+        ownerName.setVisibility(View.INVISIBLE);
+        ownerName1.setVisibility(View.INVISIBLE);
+        foodName.setVisibility(View.INVISIBLE);
+        foodName1.setVisibility(View.INVISIBLE);
+    }
+    public void makeFieldsVisble(){
+        postImage.setVisibility(View.VISIBLE);
+        ownerName.setVisibility(View.VISIBLE);
+        ownerName1.setVisibility(View.VISIBLE);
+        foodName.setVisibility(View.VISIBLE);
+        foodName1.setVisibility(View.VISIBLE);
+    }
+    private void refreshData() {
+        swipeRefresh.setRefreshing(true);
+        Model.instance.reloadPosts();
+//        viewModel.getAllData().observe(getViewLifecycleOwner(), (Postlist) -> {
+//            Log.d("livedataafteradd",String.valueOf(Postlist.size()));
+//            adapter.notifyDataSetChanged();
+      //  });
+        if (swipeRefresh.isRefreshing()) {
+            swipeRefresh.setRefreshing(false);
+//                }
+//        Model.instance.GetPostsById(ModelFireBase.getCurrentUser(),new Model.GetPostsByIdListener() {
+//            @Override
+//            public void onComplete(List<Post> p) {
+//                viewModel.setData(p);
+            // adapter.notifyDataSetChanged();
+            //   if (swipeRefresh.isRefreshing()) {
+            //      swipeRefresh.setRefreshing(false);
+//                }
+//            }
+//        });
+        }
+    }
+
+
+
+    public void checkTheUser(){
+        if(OwnerId.equals(ModelFireBase.getCurrentUser())){
+            LikeBtn.setVisibility(View.INVISIBLE);
+            DislikeBtn.setVisibility(View.INVISIBLE);
+            Toast.makeText(getActivity(),"This is your post!",Toast.LENGTH_SHORT).show();
+        }
+        else{
+            checkExistDislike();
+        }
+    }
+    public void checkExistDislike(){
+        Model.instance.GetUserById(ModelFireBase.getCurrentUser(),(user1)->{
+            if(user1.getUserDisLikes().contains(OwnerId)){
+               LikeBtn.setVisibility(View.INVISIBLE);
+               DislikeBtn.setVisibility(View.INVISIBLE);
+                Toast.makeText(getActivity(),"Yours food taste is different , Match is not possible ",Toast.LENGTH_SHORT).show();
+            }
+            else{
+                checkExistMatches();
+            }
+        });
+    }
+    public void checkExistMatches(){
+        Model.instance.GetUserById(ModelFireBase.getCurrentUser(),(user1)->{
+            if(user1.getUserMatches().contains(OwnerId)){
+                LikeBtn.setVisibility(View.INVISIBLE);
+                DislikeBtn.setVisibility(View.INVISIBLE);
+                moveMatch.setVisibility(View.VISIBLE);
+                Toast.makeText(getActivity(),"You already have match with "+postOwnerName,Toast.LENGTH_SHORT).show();
+
+            }
+            else{
+                moveMatch.setVisibility(View.INVISIBLE);
+                LikeBtn.setVisibility(View.VISIBLE);
+                DislikeBtn.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    public void Dislike(){
+        LikeOrDislike="dislike";
+        Model.instance.EditUserLikes(LikeOrDislike,OwnerId,ModelFireBase.getCurrentUser(),()->{
+            Toast.makeText(getActivity(),"You disliked "+postOwnerName+" food post!",Toast.LENGTH_SHORT).show();
+        });
+        LikeBtn.setVisibility(View.INVISIBLE);
+        DislikeBtn.setVisibility(View.INVISIBLE);
+    }
+    public void Like(){
+        LikeOrDislike="like";
+        Model.instance.EditUserLikes(LikeOrDislike,OwnerId,ModelFireBase.getCurrentUser(),()->{
+            Toast.makeText(getActivity(),"You liked "+postOwnerName+" food post!",Toast.LENGTH_SHORT).show();
+        });
+        LikeBtn.setVisibility(View.INVISIBLE);
+        DislikeBtn.setVisibility(View.INVISIBLE);
+
+        Model.instance.GetUserById(OwnerId,(user1)->{
+            if(user1.getUserLikes().contains(ModelFireBase.getCurrentUser())){
+                LikeBtn.setVisibility(View.INVISIBLE);
+                DislikeBtn.setVisibility(View.INVISIBLE);
+                moveMatch.setVisibility(View.VISIBLE);
+                LikeOrDislike="match";
+                Model.instance.EditUserLikes(LikeOrDislike,OwnerId,ModelFireBase.getCurrentUser(),()->{
+                    Toast.makeText(getActivity(),"You Got New Match with "+postOwnerName,Toast.LENGTH_SHORT).show();
+                });
+
+            }
+
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+   //    public void getAllusers(){
 //        Model.instance.GetUserByEmail(UserEmail,(user)->{
 //            Model.instance.getAllUsers((data)->{
 //                UsersList=data;
@@ -231,31 +328,9 @@ public class MainAppFragment extends Fragment {
 //        });
 //
 //    }
-//    public void Dislike(){
-//        LikeOrDislike=false;
-//        Model.instance.EditUserLikes(LikeOrDislike,UserEmail,CurrentScreenUserEmail,()->{
-//
-//            MainAppFragmentDirections.ActionMainAppFragmentSelf action =MainAppFragmentDirections.actionMainAppFragmentSelf(UserEmail,UserImageURL);
-//            Navigation.findNavController(view).navigate(action);
-//
-//        });
-//    }
-
-    private void refreshData() {
-         // swipeRefresh.setRefreshing(true);
 
 
-//        Model.instance.GetPostsById(ModelFireBase.getCurrentUser(),new Model.GetPostsByIdListener() {
-//            @Override
-//            public void onComplete(List<Post> p) {
-//                viewModel.setData(p);
-               // adapter.notifyDataSetChanged();
-             //   if (swipeRefresh.isRefreshing()) {
-              //      swipeRefresh.setRefreshing(false);
-//                }
-//            }
-//        });
-    }
+
 
     class MyViewHolder extends RecyclerView.ViewHolder{
         TextView FoodName;
@@ -284,7 +359,7 @@ public class MainAppFragment extends Fragment {
             if(!url.equals("")){
                 Picasso.get()
                         .load(url)
-                        .placeholder(R.drawable.burgerchipsdrinkbackground)
+                        .placeholder(R.drawable.logocropped)
                         .into(postImg);
             }
         }
@@ -339,7 +414,6 @@ public class MainAppFragment extends Fragment {
                 break;
             default:
                 return super.onOptionsItemSelected(item);
-
         }
         return true;
     }

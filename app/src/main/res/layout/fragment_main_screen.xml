@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backgroundopenscreennew"
+    android:background="@drawable/backgroundopenscreennew1"
     tools:context=".MainScreenFragment">
 
     <ImageView
@@ -29,7 +29,6 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:backgroundTint="#089ca4"
         app:cornerRadius="20dp"
         app:layout_constraintBottom_toTopOf="@+id/register_btn"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +47,6 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:backgroundTint="#089ca4"
         app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

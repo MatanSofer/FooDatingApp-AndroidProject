@@ -30,55 +30,53 @@ import java.util.List;
 
 
 public class LoginFragment extends Fragment {
-    EditText EmailEt,Password;
+    EditText EmailEt, Password;
     Button loginBtn;
     ProgressBar progressBar;
-    String UserPassword,UserEmail,UserImageURL;
+    String UserPassword, UserEmail;
     View view;
     private FirebaseAuth mAuth;
-    public User u1;
     boolean isValid1;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         mAuth = FirebaseAuth.getInstance();
-        view =inflater.inflate(R.layout.fragment_login, container, false);
+        view = inflater.inflate(R.layout.fragment_login, container, false);
 
         EmailEt = view.findViewById(R.id.email_log_et);
         Password = view.findViewById(R.id.password_log_et);
         loginBtn = view.findViewById(R.id.loginscreen_btn);
-        progressBar=view.findViewById(R.id.login_progressBar);
+        progressBar = view.findViewById(R.id.login_progressBar);
         progressBar.setVisibility(ViewGroup.GONE);
 
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                        login();
+                login();
 
             }
         });
-         return view;
+        return view;
     }
 
 
-    public void login(){
-        if(SaveFields())
-        {
-            mAuth.signInWithEmailAndPassword(UserEmail,UserPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+    public void login() {
+        if (SaveFields()) {
+            mAuth.signInWithEmailAndPassword(UserEmail, UserPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    if(task.isSuccessful()){
-                        Toast.makeText(getActivity(),"Login Successfull",Toast.LENGTH_LONG).show();
-                            progressBar.setVisibility(ViewGroup.VISIBLE);
-                            loginBtn.setEnabled(false);
-                            EmailEt.setEnabled(false);
-                            Password.setEnabled(false);
-                            Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_mainAppFragment);
-                    }
-                    else{
-                        Toast.makeText(getActivity(),"Login Failed"+task.getException().getMessage(),Toast.LENGTH_LONG).show();
+                    if (task.isSuccessful()) {
+                        Toast.makeText(getActivity(), "Login Successfull", Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(ViewGroup.VISIBLE);
+                        loginBtn.setEnabled(false);
+                        EmailEt.setEnabled(false);
+                        Password.setEnabled(false);
+                        Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_mainAppFragment);
+                    } else {
+                        Toast.makeText(getActivity(), "Login Failed" + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -87,38 +85,23 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    public boolean SaveFields (){
+    public boolean SaveFields() {
         boolean isValid = true;
         UserPassword = Password.getText().toString();
         UserEmail = EmailEt.getText().toString();
 
 
-
-        if(TextUtils.isEmpty(UserEmail)) {
+        if (TextUtils.isEmpty(UserEmail)) {
             EmailEt.setError("Please Fill Your Email");
-            Toast.makeText(getActivity(),"Missing Email , Try Again!",Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Missing Email , Try Again!", Toast.LENGTH_LONG).show();
             isValid = false;
-        }
-        else if(TextUtils.isEmpty(UserPassword)) {
+        } else if (TextUtils.isEmpty(UserPassword)) {
             Password.setError("Please Fill Your Name");
-            Toast.makeText(getActivity(),"Missing Password , Try Again!",Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Missing Password , Try Again!", Toast.LENGTH_LONG).show();
             isValid = false;
         }
         return isValid;
     }
-    public boolean CheckIfDetailsCorrect(){
-        mAuth.signInWithEmailAndPassword(UserEmail,UserPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                    if(task.isSuccessful()){
-                        Toast.makeText(getActivity(),"Login Successfull",Toast.LENGTH_LONG).show();
-                    }
-            }
-        });
-
-        return isValid1;
-    }
-
 
 
 }

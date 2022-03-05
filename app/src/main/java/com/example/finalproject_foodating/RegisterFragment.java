@@ -29,10 +29,10 @@ import com.google.firebase.auth.FirebaseUser;
 public class RegisterFragment extends Fragment {
     View view;
     Button RegisterBtn;
-    RadioButton MaleGenderBtn,FemaleGenderBtn;
-    EditText NameEt,EmailEt,Password;
+    RadioButton MaleGenderBtn, FemaleGenderBtn;
+    EditText NameEt, EmailEt, Password;
     ProgressBar progressBar;
-    String UserName,UserPassword,UserEmail,UserGender;
+    String UserName, UserPassword, UserEmail, UserGender;
     private FirebaseAuth mAuth;
 
 
@@ -41,19 +41,17 @@ public class RegisterFragment extends Fragment {
                              Bundle savedInstanceState) {
         mAuth = FirebaseAuth.getInstance();
         // Inflate the layout for this fragment
-        view =inflater.inflate(R.layout.fragment_register, container, false);
+        view = inflater.inflate(R.layout.fragment_register, container, false);
 
         NameEt = view.findViewById(R.id.name_reg_et);
         EmailEt = view.findViewById(R.id.email_reg_et);
         Password = view.findViewById(R.id.password_reg);
-        MaleGenderBtn = (RadioButton)view.findViewById(R.id.male_reg_radiobtn);
-        FemaleGenderBtn = (RadioButton)view.findViewById(R.id.female_reg_radiobtn);
+        MaleGenderBtn = (RadioButton) view.findViewById(R.id.male_reg_radiobtn);
+        FemaleGenderBtn = (RadioButton) view.findViewById(R.id.female_reg_radiobtn);
         RegisterBtn = view.findViewById(R.id.editsavebtn);
-        progressBar=view.findViewById(R.id.register_progressBar);
+        progressBar = view.findViewById(R.id.register_progressBar);
 
         progressBar.setVisibility(ViewGroup.GONE);
-
-
 
 
         RegisterBtn.setOnClickListener(new View.OnClickListener() {
@@ -64,75 +62,68 @@ public class RegisterFragment extends Fragment {
         });
 
 
-          return view;
+        return view;
 
     }
-    public void register(){
-        if(SaveUserFields()){
-            mAuth.createUserWithEmailAndPassword(UserEmail,UserPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+
+    public void register() {
+        if (SaveUserFields()) {
+            mAuth.createUserWithEmailAndPassword(UserEmail, UserPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(getActivity(),"Registered successfully!",Toast.LENGTH_LONG).show();
-                            progressBar.setVisibility(ViewGroup.VISIBLE);
-                            RegisterBtn.setEnabled(false);
-                            NameEt.setEnabled(false);
-                            EmailEt.setEnabled(false);
-                            Password.setEnabled(false);
-                            MaleGenderBtn.setEnabled(false);
-                            FemaleGenderBtn.setEnabled(false);
-                            User user = new User(UserName,UserEmail,UserGender);
+                    if (task.isSuccessful()) {
+                        Toast.makeText(getActivity(), "Registered successfully!", Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(ViewGroup.VISIBLE);
+                        RegisterBtn.setEnabled(false);
+                        NameEt.setEnabled(false);
+                        EmailEt.setEnabled(false);
+                        Password.setEnabled(false);
+                        MaleGenderBtn.setEnabled(false);
+                        FemaleGenderBtn.setEnabled(false);
+                        User user = new User(UserName, UserEmail, UserGender);
 
-                            Model.instance.addUser(user,()->{
-                                Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_mainAppFragment);
+                        Model.instance.addUser(user, () -> {
+                            Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_mainAppFragment);
 
-                            });
-                        }
-                        else{
-                            Toast.makeText(getActivity(),"Registered Failed"+task.getException().getMessage(),Toast.LENGTH_LONG).show();
-                        }
+                        });
+                    } else {
+                        Toast.makeText(getActivity(), "Registered Failed" + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    }
 
                 }
             });
 
 
-
         }
     }
 
-    public boolean SaveUserFields(){
-        boolean isValid=true;
+    public boolean SaveUserFields() {
+        boolean isValid = true;
         UserName = NameEt.getText().toString();
         UserPassword = Password.getText().toString();
         UserEmail = EmailEt.getText().toString();
 
-        if(TextUtils.isEmpty(UserName)) {
+        if (TextUtils.isEmpty(UserName)) {
             NameEt.setError("Please Fill Your Name");
-            Toast.makeText(getActivity(),"Missing Name , Try Again!",Toast.LENGTH_LONG).show();
-            isValid=false;
-        }
-        else if(TextUtils.isEmpty(UserPassword)) {
+            Toast.makeText(getActivity(), "Missing Name , Try Again!", Toast.LENGTH_LONG).show();
+            isValid = false;
+        } else if (TextUtils.isEmpty(UserPassword)) {
 
             Password.setError("Please Fill Your Name");
-            Toast.makeText(getActivity(),"Missing Password , Try Again!",Toast.LENGTH_LONG).show();
-            isValid=false;
-        }
-        else if(TextUtils.isEmpty(UserEmail)) {
+            Toast.makeText(getActivity(), "Missing Password , Try Again!", Toast.LENGTH_LONG).show();
+            isValid = false;
+        } else if (TextUtils.isEmpty(UserEmail)) {
             EmailEt.setError("Please Fill Your Email");
-            Toast.makeText(getActivity(),"Missing Email , Try Again!",Toast.LENGTH_LONG).show();
-            isValid=false;
+            Toast.makeText(getActivity(), "Missing Email , Try Again!", Toast.LENGTH_LONG).show();
+            isValid = false;
         }
-        if(MaleGenderBtn.isChecked())
-        {
-            UserGender="male";
-        }
-        else if(FemaleGenderBtn.isChecked())
-        {
-            UserGender="female";
-        }
-        else{
-            Toast.makeText(getActivity(),"Missing Gender , Try Again!",Toast.LENGTH_LONG).show();
-            isValid=false;
+        if (MaleGenderBtn.isChecked()) {
+            UserGender = "male";
+        } else if (FemaleGenderBtn.isChecked()) {
+            UserGender = "female";
+        } else {
+            Toast.makeText(getActivity(), "Missing Gender , Try Again!", Toast.LENGTH_LONG).show();
+            isValid = false;
         }
 
         return isValid;

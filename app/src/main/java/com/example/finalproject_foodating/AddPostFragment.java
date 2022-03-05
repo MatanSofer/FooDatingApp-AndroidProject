@@ -44,10 +44,10 @@ import java.util.List;
 
 public class AddPostFragment extends Fragment {
     Button SavePostBtn;
-    EditText FoodName,Description;
+    EditText FoodName, Description;
     ProgressBar progressBar;
-   // User user;
-    String DescriptionStr,FoodNameStr;
+    // User user;
+    String DescriptionStr, FoodNameStr;
     String foodId;
     View view;
     MyAdapter adapter;
@@ -58,7 +58,7 @@ public class AddPostFragment extends Fragment {
     ImageView postPhoto;
     Bitmap bitmap;
     ImageButton cameraBtn;
-    static final Integer REQUEST_IMAGE_CAPTURE =  1;
+    static final Integer REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -77,20 +77,24 @@ public class AddPostFragment extends Fragment {
         progressBar.setVisibility(ViewGroup.GONE);
         Model.instance.reloadPosts();
 
-        postPhoto= view.findViewById(R.id.post_imageview);
+        postPhoto = view.findViewById(R.id.post_imageview);
         FoodName = view.findViewById(R.id.NewFoodName_et);
         Description = view.findViewById(R.id.NewDescription_et);
         SavePostBtn = view.findViewById(R.id.save_post_btn);
+
         SavePostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SavePostDetails();
+                if(check()){
+                    SavePostDetails();
+                }else{
+                    Toast.makeText(getActivity(), "please fill all details ", Toast.LENGTH_SHORT).show();
+                }
                 Model.instance.reloadPosts();
             }
         });
 
-        Log.d("current",ModelFireBase.getCurrentUser());
-        //get all the posts the user owns
+
         list = view.findViewById(R.id.post_edit_rv);
         list.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -98,7 +102,7 @@ public class AddPostFragment extends Fragment {
         adapter = new MyAdapter();
         list.setAdapter(adapter);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(list.getContext(), linearLayoutManager.getOrientation());
-       list.addItemDecoration(dividerItemDecoration);
+        list.addItemDecoration(dividerItemDecoration);
 
 
         adapter.setOnItemClickListener(new OnItemClickListener() {
@@ -108,9 +112,11 @@ public class AddPostFragment extends Fragment {
                 FoodName.setEnabled(false);
                 Description.setEnabled(false);
                 Post p = viewModel.getData().getValue().get(position);
-                foodId = p.getFoodName()+p.getOwner();
-                AddPostFragmentDirections.ActionEditDetailsFragmentToEditPostFragment action = AddPostFragmentDirections.actionEditDetailsFragmentToEditPostFragment(foodId);
-                Navigation.findNavController(v).navigate(action);
+                foodId = p.getFoodName() + p.getOwner();
+                EditPostFragment.setFoodId(foodId);
+                Navigation.findNavController(view).navigate(R.id.action_editDetailsFragment_to_editPostFragment);
+//                AddPostFragmentDirections.ActionEditDetailsFragmentToEditPostFragment action = AddPostFragmentDirections.actionEditDetailsFragmentToEditPostFragment(foodId);
+//                Navigation.findNavController(v).navigate(action);
             }
         });
 
@@ -122,9 +128,11 @@ public class AddPostFragment extends Fragment {
             }
         });
         // setHasOptionsMenu(true);
-        if(viewModel.getData().getValue()==null){refreshData();}
+        if (viewModel.getData().getValue() == null) {
+            refreshData();
+        }
 
-        viewModel.getData().observe(getViewLifecycleOwner(),(Postlist)-> {
+        viewModel.getData().observe(getViewLifecycleOwner(), (Postlist) -> {
             adapter.notifyDataSetChanged();
         });
 
@@ -132,42 +140,37 @@ public class AddPostFragment extends Fragment {
         cameraBtn = view.findViewById(R.id.post_camera_btn);
         cameraBtn.setOnClickListener(v -> {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent,REQUEST_IMAGE_CAPTURE);
+            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
         });
 
         return view;
     }
-    public void onActivityResult(int requestCode,int resultCode ,@NonNull Intent data){
-        super.onActivityResult(requestCode,resultCode,data);
-        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
-            Bundle bundle=data.getExtras();
-             bitmap = (Bitmap) bundle.get("data");
+
+    public void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle bundle = data.getExtras();
+            bitmap = (Bitmap) bundle.get("data");
             postPhoto.setImageBitmap(bitmap);
         }
     }
+
     //ot right function just to check
     private void refreshData() {
-      //  swipeRefresh.setRefreshing(true);
-
-
-
-//        Model.instance.GetPostsById(ModelFireBase.getCurrentUser(),new Model.GetPostsByIdListener() {
-//            @Override
-//            public void onComplete(List<Post> p) {
-//                viewModel.setData(p);
-//                adapter.notifyDataSetChanged();
-//                if (swipeRefresh.isRefreshing()) {
-//                    swipeRefresh.setRefreshing(false);
-//                }
-//            }
-//        });
+        swipeRefresh.setRefreshing(true);
+        Model.instance.reloadPosts();
+//
+        if (swipeRefresh.isRefreshing()) {
+            swipeRefresh.setRefreshing(false);
+        }
     }
+
     //    @Override
 //    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
 //        super.onCreateOptionsMenu(menu, inflater);
 //        inflater.inflate(R.menu.student_list_menu,menu);
 //    }
-    class MyViewHolder extends RecyclerView.ViewHolder{
+    class MyViewHolder extends RecyclerView.ViewHolder {
         TextView FoodName;
         TextView FoodDescription;
         ImageView postImg;
@@ -182,63 +185,76 @@ public class AddPostFragment extends Fragment {
                 public void onClick(View v) {
                     int pos = getAdapterPosition();
                     if (listener != null) {
-                        listener.onItemClick(pos,v);
+                        listener.onItemClick(pos, v);
                     }
                 }
             });
         }
-        public void bind(Post post){
+
+        public void bind(Post post) {
             FoodName.setText(post.FoodName);
             FoodDescription.setText(post.getDescription());
             String url = post.getImageURL();
-            if(!url.equals("")){
+            if (!url.equals("")) {
                 Picasso.get()
                         .load(url)
-                        .placeholder(R.drawable.burgerchipsdrinkbackground)
+                        .placeholder(R.drawable.logocropped)
                         .into(postImg);
             }
         }
     }
-    interface OnItemClickListener{
+
+    interface OnItemClickListener {
         void onItemClick(int position, View v);
     }
-    class MyAdapter extends RecyclerView.Adapter<MyViewHolder>{
+
+    class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         OnItemClickListener listener;
-        public void setOnItemClickListener(OnItemClickListener listener){
+
+        public void setOnItemClickListener(OnItemClickListener listener) {
             this.listener = listener;
         }
+
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = getLayoutInflater().inflate(R.layout.user_post,parent,false);
-            MyViewHolder holder = new MyViewHolder(view,listener);
+            View view = getLayoutInflater().inflate(R.layout.user_post, parent, false);
+            MyViewHolder holder = new MyViewHolder(view, listener);
             return holder;
         }
+
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             Post post = viewModel.getData().getValue().get(position);
             holder.bind(post);
 
         }
+
         @Override
         public int getItemCount() {
-            if(viewModel.getData().getValue()==null){
+            if (viewModel.getData().getValue() == null) {
                 return 0;
             }
             return viewModel.getData().getValue().size();
         }
     }
-
+    public boolean check(){
+        if(bitmap!=null && Description.getText().toString()!=null
+          &&FoodName.getText().toString()!=null){
+            return true;
+        }
+        return false;
+    }
     public void SavePostDetails() {
         DescriptionStr = Description.getText().toString();
         FoodNameStr = FoodName.getText().toString();
         foodId = FoodNameStr + ModelFireBase.getCurrentUser();
         Post post = new Post(ModelFireBase.getCurrentUser(), FoodNameStr, DescriptionStr, true);
 
-        if(bitmap!=null){
+        if (bitmap != null) {
             Model.instance.saveImage(foodId, bitmap, (URL) -> {
                 post.setImageURL(URL);
-                Model.instance.setPostImageURL(foodId, URL, () -> {
+                Model.instance.setPostImageURL(foodId, URL,FoodNameStr, () -> {
                     //this.ImageURL = URL;
                 });
 
@@ -248,8 +264,10 @@ public class AddPostFragment extends Fragment {
 
         Model.instance.addPost(post, foodId, () -> {
             Toast.makeText(getActivity(), "Your post has been added successfully!", Toast.LENGTH_SHORT).show();
+
         });
 
-
+        Description.getText().clear();
+        FoodName.getText().clear();
     }
-    }
+}

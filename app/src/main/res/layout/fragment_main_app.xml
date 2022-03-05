@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/foobackgroundnew"
+    android:background="@drawable/logregbtn"
     tools:context=".MainAppFragment">
 
     <ImageButton
         android:id="@+id/dislikebtn"
         android:layout_width="116dp"
         android:layout_height="86dp"
-        android:src="@drawable/dislikepic"
+        android:src="@drawable/newdislike"
         app:layout_constraintBottom_toBottomOf="@+id/likebtn"
         app:layout_constraintEnd_toStartOf="@+id/likebtn"
         app:layout_constraintHorizontal_bias="0.5"
@@ -24,7 +24,7 @@
         android:layout_width="120dp"
         android:layout_height="89dp"
         android:layout_marginBottom="4dp"
-        android:src="@drawable/likepic"
+        android:src="@drawable/newlike"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -63,49 +63,70 @@
         app:layout_constraintHorizontal_bias="0.552"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.463" />
+        app:layout_constraintVertical_bias="0.44" />
 
     <TextView
         android:id="@+id/FoodName"
         android:layout_width="82dp"
         android:layout_height="25dp"
         android:layout_marginStart="28dp"
-        android:text="Food name:"
+        android:fontFamily="@font/nunito"
+        android:text="Food:"
+        android:textColor="#0f3675"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/foodnameTV"
-        app:layout_constraintHorizontal_bias="0.03"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/MainApp_progressBar" />
 
     <TextView
         android:id="@+id/OwnerNameTV"
-        android:layout_width="196dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="100dp"
+        android:layout_width="199dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/textview_background"
         android:ems="10"
+        android:fontFamily="@font/nunito"
+        android:gravity="center"
         android:text="  "
-        app:layout_constraintBottom_toBottomOf="@+id/Owner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/foodnameTV" />
+        android:textColor="#0f3675"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toTopOf="@+id/MainApp_Refresh"
+        app:layout_constraintEnd_toEndOf="@+id/foodnameTV"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/Owner"
+        app:layout_constraintTop_toBottomOf="@+id/foodnameTV"
+        app:layout_constraintVertical_bias="0.47" />
 
     <TextView
         android:id="@+id/Owner"
-        android:layout_width="85dp"
-        android:layout_height="30dp"
+        android:layout_width="83dp"
+        android:layout_height="24dp"
         android:layout_marginStart="28dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="4dp"
-        android:text="Owner name:"
+        android:fontFamily="@font/nunito"
+        android:text="Owner:"
+        android:textColor="#0f3675"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/MainApp_Refresh"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/FoodName" />
+        app:layout_constraintTop_toBottomOf="@+id/FoodName"
+        app:layout_constraintVertical_bias="0.75" />
 
     <TextView
         android:id="@+id/foodnameTV"
-        android:layout_width="205dp"
-        android:layout_height="28dp"
-        android:layout_marginEnd="92dp"
+        android:layout_width="199dp"
+        android:layout_height="29dp"
+        android:layout_marginEnd="96dp"
         android:layout_marginBottom="4dp"
+        android:background="@drawable/textview_background"
         android:ems="10"
+        android:fontFamily="@font/nunito"
+        android:gravity="center"
         android:text="  "
+        android:textColor="#0f3675"
+        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="@+id/FoodName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/MainApp_progressBar"
@@ -113,15 +134,28 @@
 
     <ImageView
         android:id="@+id/MainAppFoodImage"
-        android:layout_width="416dp"
-        android:layout_height="270dp"
+        android:layout_width="393dp"
+        android:layout_height="253dp"
         app:layout_constraintBottom_toBottomOf="@+id/MainApp_progressBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.125"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@drawable/logocropped" />
+
+    <Button
+        android:id="@+id/movematchesbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        app:cornerRadius="20dp"
+        app:strokeColor="#0f3675"
+        android:text="move to matches"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/MainApp_Refresh" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

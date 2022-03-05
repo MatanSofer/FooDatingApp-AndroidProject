@@ -19,17 +19,18 @@ import com.example.finalproject_foodating.model.ModelFireBase;
 
 public class MainScreenFragment extends Fragment {
 
-    Button LoginBtn,RegisterBtn;
-    View view;
+    Button LoginBtn, RegisterBtn;
     ProgressBar progressBar;
+    View view;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        view= inflater.inflate(R.layout.fragment_main_screen, container, false);
+        view = inflater.inflate(R.layout.fragment_main_screen, container, false);
         RegisterBtn = view.findViewById(R.id.register_btn);
         LoginBtn = view.findViewById(R.id.login_btn);
-        progressBar=view.findViewById(R.id.mainscreen_progressBar);
+        progressBar = view.findViewById(R.id.mainscreen_progressBar);
         progressBar.setVisibility(ViewGroup.GONE);
 
         LoginBtn.setOnClickListener(new View.OnClickListener() {
