@@ -36,7 +36,6 @@ public class LoginFragment extends Fragment {
     String UserPassword, UserEmail;
     View view;
     private FirebaseAuth mAuth;
-    boolean isValid1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -47,45 +47,9 @@ public class ModelFireBase {
         return current;
     }
 
-    public static FirebaseAuth getAuthUser() {
-        return mAuth;
-    }
 
-    public static User getCurrentUserObj() {
-        Model.instance.GetUserById(current, (user) -> {
-            user1 = user;
-        });
-        return user1;
-    }
 
-    //if inside the fragment will be import  firebase -10 points
-    //because if the fragment want access to db it should be through the model
-    public void getAllUsers(Model.GetAllUsersListener listener) {
-        db.collection("user").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                LinkedList<User> UsersList = new LinkedList<>(); //might be error
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot doc : task.getResult()) {
 
-                        User u = User.fromJson(doc.getData());
-                        if (u != null) {
-                            UsersList.add(u); //add from document each user
-
-                        }
-                    }
-                } else {
-
-                }
-                listener.onComplete(UsersList);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                listener.onComplete(null);
-            }
-        });
-    }
 
     //in fire base , if i bring the document i bring all of him
     //THE LISTENER WHILL ALERT US WHEN USER HAS BEEN ADDED TO DB
@@ -137,20 +101,15 @@ public class ModelFireBase {
 
 
         Model.instance.GetUserById(CurrentUser, (user1) -> {
-            Log.d("current1",String.valueOf(AllCurrentUsersLikes.size()));
             AllCurrentUserDislikes = user1.getUserDisLikes();
             AllCurrentUsersMatches = user1.getUserMatches();
             AllCurrentUsersLikes = user1.getUserLikes();
-            Log.d("current2",String.valueOf(AllCurrentUsersLikes.size()));
 
             Model.instance.GetUserById(PostUserId, (user) -> {
-                Log.d("current3",String.valueOf(AllCurrentUsersLikes.size()));
-                //  AllCurrentUsersLikes = user.getUserLikes();
                 AllPostUserDislikes = user.getUserDisLikes();
                 AllPostUserMatches = user.getUserMatches();
                 if (LikeOrDislike.equals("like")) {
                     AllCurrentUsersLikes.add(PostUserId);
-                    Log.d("current4",String.valueOf(AllCurrentUsersLikes.size()));
                     EditCurrentUserIdLikes.update("user_likes", AllCurrentUsersLikes)
                             .addOnSuccessListener((successListener) -> {
                                 listener.onComplete();
@@ -201,14 +160,11 @@ public class ModelFireBase {
         });
 
 
-
-
     }
 //////////////////////////////////////////////////////////////////////////////
 
 
     public void addPost(Post NewPost, String FoodId, Boolean bool, Model.AddPostListener listener) {
-// Add a new document with a generated ID
         db.collection("posts")
                 .document(FoodId).set(NewPost.toJson())
                 .addOnSuccessListener((successListener) -> {
@@ -226,12 +182,12 @@ public class ModelFireBase {
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                LinkedList<Post> postsList = new LinkedList<>(); //might be error
+                LinkedList<Post> postsList = new LinkedList<>();
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
                         Post p = Post.fromJson(doc.getData());
                         if (p != null) {
-                            postsList.add(p); //add from document each user
+                            postsList.add(p);
                         }
                     }
                 } else {
@@ -253,20 +209,14 @@ public class ModelFireBase {
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                LinkedList<Post> postsList = new LinkedList<>(); //might be error
+                LinkedList<Post> postsList = new LinkedList<>();
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
                         Post p = Post.fromJson(doc.getData());
-                        // String str;
                         if (p != null && p.getOwner().equals(UserId))//&&p.getFlag()==true) {
                         {
-
                             postsList.add(p); //add from document each user
                         }
-//                        else if( UserId.equals("all")){   //p.flag==true &&
-//                            postsList.add(p);
-//                        }
-
                         else {
                             continue;
                         }

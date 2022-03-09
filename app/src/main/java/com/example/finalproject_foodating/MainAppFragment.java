@@ -105,8 +105,7 @@ public class MainAppFragment extends Fragment {
 
 
         viewModel.getAllData().observe(getViewLifecycleOwner(),(Postlist)-> {
-            Log.d("livedatabeforeadd",String.valueOf(Postlist.size()));
-            adapter.notifyDataSetChanged();
+             adapter.notifyDataSetChanged();
         });
 
         swipeRefresh = view.findViewById(R.id.MainApp_Refresh);
@@ -174,23 +173,8 @@ public class MainAppFragment extends Fragment {
     private void refreshData() {
         swipeRefresh.setRefreshing(true);
         Model.instance.reloadPosts();
-//        viewModel.getAllData().observe(getViewLifecycleOwner(), (Postlist) -> {
-//            Log.d("livedataafteradd",String.valueOf(Postlist.size()));
-//            adapter.notifyDataSetChanged();
-      //  });
         if (swipeRefresh.isRefreshing()) {
             swipeRefresh.setRefreshing(false);
-//                }
-//        Model.instance.GetPostsById(ModelFireBase.getCurrentUser(),new Model.GetPostsByIdListener() {
-//            @Override
-//            public void onComplete(List<Post> p) {
-//                viewModel.setData(p);
-            // adapter.notifyDataSetChanged();
-            //   if (swipeRefresh.isRefreshing()) {
-            //      swipeRefresh.setRefreshing(false);
-//                }
-//            }
-//        });
         }
     }
 
@@ -265,71 +249,6 @@ public class MainAppFragment extends Fragment {
 
         });
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-   //    public void getAllusers(){
-//        Model.instance.GetUserByEmail(UserEmail,(user)->{
-//            Model.instance.getAllUsers((data)->{
-//                UsersList=data;
-//                //forcheck.setText(UsersList.get(0).getEmail());
-//                if(UsersList!=null){
-//                    for(int i = 0 ; i <UsersList.size() ;i++){
-//                        if(!(UsersList.get(i).getEmail().equals(UserEmail))){
-//                            if(!(user.getUserLikes().contains(UsersList.get(i).getEmail())) && !(user.getUserDisLikes().contains(UsersList.get(i).getEmail()))){
-//                                forcheck.setText(UsersList.get(i).getEmail());
-//                                CurrentScreenUserEmail=UsersList.get(i).getEmail();
-//                                CurrentScreenUser=UsersList.get(i);
-//                                break;
-//                            }
-//
-//                        }
-//
-//                    }
-//
-//                }
-//                else{
-//                    forcheck.setText("NO USERS TO SHOW!");
-//                }
-//
-//
-//
-//            });
-//
-//        });
-
-    //  }
-
-
-//    public void Like(){
-//        LikeOrDislike=true;
-//
-//        Model.instance.EditUserLikes(LikeOrDislike,UserEmail,CurrentScreenUserEmail,()->{
-//            if(CurrentScreenUser.getUserLikes().contains(UserEmail)){
-//                Toast.makeText(getActivity(),"There is a match with " +CurrentScreenUser.getName() ,Toast.LENGTH_LONG).show();
-//                MainAppFragmentDirections.ActionMainAppFragmentToMatchesFragment action =MainAppFragmentDirections.actionMainAppFragmentToMatchesFragment(UserEmail,UserImageURL);
-//                Navigation.findNavController(view).navigate(action);
-//            }
-//            else{
-//                MainAppFragmentDirections.ActionMainAppFragmentSelf action =MainAppFragmentDirections.actionMainAppFragmentSelf(UserEmail,UserImageURL);
-//                Navigation.findNavController(view).navigate(action);
-//            }
-//
-//        });
-//
-//    }
-
-
 
 
     class MyViewHolder extends RecyclerView.ViewHolder{

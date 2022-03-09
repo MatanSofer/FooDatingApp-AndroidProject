@@ -46,12 +46,10 @@ public class AddPostFragment extends Fragment {
     Button SavePostBtn;
     EditText FoodName, Description;
     ProgressBar progressBar;
-    // User user;
     String DescriptionStr, FoodNameStr;
     String foodId;
     View view;
     MyAdapter adapter;
-    SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView list;
     AddPostFragmentViewModel viewModel;
     SwipeRefreshLayout swipeRefresh;
@@ -72,7 +70,6 @@ public class AddPostFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_add_post, container, false);
 
-        //user= ModelFireBase.getCurrentUserObj();
         progressBar = view.findViewById(R.id.edit_progressBar);
         progressBar.setVisibility(ViewGroup.GONE);
         Model.instance.reloadPosts();
@@ -115,8 +112,7 @@ public class AddPostFragment extends Fragment {
                 foodId = p.getFoodName() + p.getOwner();
                 EditPostFragment.setFoodId(foodId);
                 Navigation.findNavController(view).navigate(R.id.action_editDetailsFragment_to_editPostFragment);
-//                AddPostFragmentDirections.ActionEditDetailsFragmentToEditPostFragment action = AddPostFragmentDirections.actionEditDetailsFragmentToEditPostFragment(foodId);
-//                Navigation.findNavController(v).navigate(action);
+
             }
         });
 
@@ -127,7 +123,7 @@ public class AddPostFragment extends Fragment {
                 refreshData();
             }
         });
-        // setHasOptionsMenu(true);
+
         if (viewModel.getData().getValue() == null) {
             refreshData();
         }
@@ -155,21 +151,17 @@ public class AddPostFragment extends Fragment {
         }
     }
 
-    //ot right function just to check
+
     private void refreshData() {
         swipeRefresh.setRefreshing(true);
         Model.instance.reloadPosts();
-//
+
         if (swipeRefresh.isRefreshing()) {
             swipeRefresh.setRefreshing(false);
         }
     }
 
-    //    @Override
-//    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-//        super.onCreateOptionsMenu(menu, inflater);
-//        inflater.inflate(R.menu.student_list_menu,menu);
-//    }
+
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView FoodName;
         TextView FoodDescription;

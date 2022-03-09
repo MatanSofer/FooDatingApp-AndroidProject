@@ -24,15 +24,6 @@ public class Model {
     }
 
 
-    public interface GetAllUsersListener {
-        void onComplete(List<User> data);
-    }
-
-    public void getAllUsers(GetAllUsersListener listener) {
-        modelFireBase.getAllUsers(listener);
-    }
-
-
     public interface AddUserListener {
         void onComplete();
     }
@@ -77,10 +68,8 @@ public class Model {
     public void reloadPosts() {
 
         Long localLastUpdate = Post.getLocalLastUpdated();
-        ;
         modelFireBase.GetPostsById(localLastUpdate, ModelFireBase.getCurrentUser(), (list) -> {
             MyApplication.executorService.execute(() -> {
-                String str;
                 Long lLastUpdate = new Long(0);
                 for (Post p : list) {
                     if (p.getFlag() == false) {
@@ -90,8 +79,7 @@ public class Model {
                         AppLocalDB.db.postDao().insertAll(p);
                     }
                     if (p.getLastUpdate() > lLastUpdate) {
-                        lLastUpdate = p.getLastUpdate()
-                        ;
+                        lLastUpdate = p.getLastUpdate();
                     }
                 }
                 Post.setLocalLastUpdated(lLastUpdate);
@@ -103,15 +91,13 @@ public class Model {
 
         modelFireBase.getAllPosts(localLastUpdate, (list) -> {
             MyApplication.executorService.execute(() -> {
-                String str;
                 Long lLastUpdate = new Long(0);
                 for (Post p : list) {
                     if (p.getFlag() == false) {
                         AppLocalDB.db.postDao().delete(p);
                     } else {
                         AppLocalDB.db.postDao().insertAll(p);
-                        Log.d("model true", "t");
-                    }
+                      }
                     if (p.getLastUpdate() > lLastUpdate) {
                         lLastUpdate = p.getLastUpdate();
                     }
@@ -124,9 +110,7 @@ public class Model {
         });
 
 
-//        modelFireBase.GetPostsById(ModelFireBase.getCurrentUser() ,(list)->{
-//            postListLD.setValue(list);
-//        });
+
     }
 
 
@@ -193,13 +177,6 @@ public class Model {
 
 //////////////
 
-//    public interface GetUserImageUrlListener {
-//        void onComplete(String UserURL);
-//    }
-//    public void GetUserImageURL(String UserEmail,GetUserImageUrlListener listener)
-//    {
-//        ModelFireBase.getUserImageURL(UserEmail,listener);
-//    }
 
     public interface EditUserLikesListener {
         void onComplete();

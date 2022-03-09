@@ -50,7 +50,7 @@
     <EditText
         android:id="@+id/description_editpost_et"
         android:layout_width="238dp"
-        android:layout_height="38dp"
+        android:layout_height="50dp"
         android:ems="10"
         app:layout_constraintBottom_toBottomOf="@+id/description_tv"
         app:layout_constraintEnd_toEndOf="@+id/foodname_editpost_et"

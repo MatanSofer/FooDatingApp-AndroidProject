@@ -136,7 +136,6 @@ public class EditPostFragment extends Fragment {
         String newFood_name = foodNameEt.getText().toString();
         if (bitmap != null) {
             Model.instance.saveImage(FoodPostId, bitmap, (URL) -> {
-                //post.setImageURL(URL);
                 Model.instance.setPostImageURL(FoodPostId, URL,newFood_name, () -> {
                     //  Navigation.findNavController(view).navigate(R.id.action_editPostFragment_to_editDetailsFragment);
                 });
